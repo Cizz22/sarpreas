@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
             $table->foreignId('subunit_id')->constrained('subunits')->onDelete('cascade');
+            $table->foreignId('coordinator_id')->constrained('members')->onDelete('cascade');
+            $table->date('tanggal_penilaian')->default(today());
             $table->timestamps();
         });
     }

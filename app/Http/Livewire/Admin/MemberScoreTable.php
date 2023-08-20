@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Member;
+use App\Models\ScoreMember;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,9 +11,11 @@ use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class MemberTable extends PowerGridComponent
+final class MemberScoreTable extends PowerGridComponent
 {
     use ActionButton;
+
+    public $member_id;
 
     /*
     |--------------------------------------------------------------------------
@@ -48,23 +50,20 @@ final class MemberTable extends PowerGridComponent
     /**
      * PowerGrid datasource.
      *
-     * @return Builder<\App\Models\Member>
+     * @return Builder<\App\Models\ScoreMember>
      */
     public function datasource(): Builder
     {
-        return Member::query()
-            ->whereRelation('user', 'roles', 'member')
-            ->leftjoin('subunit_members', function ($q) {
-                $q->on("members.id", "subunit_members.memberable_id")
-                    ->where('subunit_members.memberable_type', 'App\Models\Member');
+        $scoreMember = ScoreMember::query()
+            ->where('member_id', $this->member_id)
+            ->join('subunits', function ($join) {
+                $join->on('subunits.id', '=', 'score_members.subunit_id');
             })
-            ->leftjoin('subunits', function ($q) {
-                $q->on("subunits.id", "subunit_members.subunit_id");
+            ->join('members', function ($join) {
+                $join->on('members.id', '=', 'score_members.coordinator_id');
             })
-            ->leftjoin('units', function ($q) {
-                $q->on("units.id", "subunits.unit_id");
-            })
-            ->select('members.*', 'subunits.name as subunit_name', 'units.name as unit_name');
+            ->select('score_members.*', 'subunits.name as subunit_name', 'members.name as coordinator_name');
+        return $scoreMember;
     }
 
     /*
@@ -100,14 +99,11 @@ final class MemberTable extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('id')
-            ->addColumn('name')
-            ->addColumn('no_hp')
-            ->addColumn('unit_name')
-            ->addColumn('unit_name_formatted', fn (Member $model) => $model->unit_name ?? '-')
+            ->addColumn('coordinator_name')
             ->addColumn('subunit_name')
-            ->addColumn('subunit_name_formatted', fn (Member $model) => $model->subunit_name ?? '-')
-            ->addColumn('created_at')
-            ->addColumn('created_at_formatted', fn (Member $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
+            ->addColumn('tanggal_penilaian')
+            ->addColumn('tanggal_penilaian_formatted', fn (ScoreMember $model) => Carbon::parse($model->tanggal_penilaian)->format('d/m/Y'))
+            ->addColumn('sum_score', fn (ScoreMember $model) => $model->sumScore());
     }
 
     /*
@@ -132,46 +128,19 @@ final class MemberTable extends PowerGridComponent
                 ->sortable()
                 ->hidden(),
 
-            Column::make('Name', 'name')
+            Column::make('Nama Coordinator', 'coordinator_name')
                 ->searchable()
                 ->sortable(),
 
-            Column::make('No HP', 'no_hp')
+            Column::make('Subunit', 'subunit_name')
+                ->searchable(),
+
+            Column::make('Tanggal Penilaian', 'tanggal_penilaian_formatted', 'tanggal_penilaian')
+                ->searchable(),
+
+            Column::make('Total Skor', 'sum_score')
                 ->searchable()
                 ->sortable(),
-            Column::make('Unit', 'unit_name_formatted')
-                ->searchable()
-                ->sortable(),
-            Column::make('Subunit', 'subunit_name_formatted')
-                ->searchable()
-                ->sortable(),
-        ];
-    }
-
-    public function header(): array
-    {
-        return [
-            Button::make('add', 'Add')
-                ->class('bg-blue-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.member.modal-add', []),
-        ];
-    }
-
-
-    public function actions(): array
-    {
-        return [
-            Button::make('detail', 'Detail')
-                ->class('bg-green-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-                ->openModal('admin.component.member.modal-detail', ['id' => 'id']),
-
-            Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm'),
-
-
-            Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-
         ];
     }
 
@@ -180,13 +149,13 @@ final class MemberTable extends PowerGridComponent
      *
      * @return array<int, Filter>
      */
-    // public function filters(): array
-    // {
-    //     return [
-    //         Filter::inputText('name'),
-    //         Filter::datepicker('created_at_formatted', 'created_at'),
-    //     ];
-    // }
+    public function filters(): array
+    {
+        return [
+            Filter::inputText('name'),
+            Filter::datepicker('tanggal_penilaian_formatted', 'tanggal_penilaian'),
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -197,7 +166,7 @@ final class MemberTable extends PowerGridComponent
     */
 
     /**
-     * PowerGrid Member Action Buttons.
+     * PowerGrid ScoreMember Action Buttons.
      *
      * @return array<int, Button>
      */
@@ -208,11 +177,11 @@ final class MemberTable extends PowerGridComponent
        return [
            Button::make('edit', 'Edit')
                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('member.edit', ['member' => 'id']),
+               ->route('score-member.edit', ['score-member' => 'id']),
 
            Button::make('destroy', 'Delete')
                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('member.destroy', ['member' => 'id'])
+               ->route('score-member.destroy', ['score-member' => 'id'])
                ->method('delete')
         ];
     }
@@ -227,7 +196,7 @@ final class MemberTable extends PowerGridComponent
     */
 
     /**
-     * PowerGrid Member Action Rules.
+     * PowerGrid ScoreMember Action Rules.
      *
      * @return array<int, RuleActions>
      */
@@ -239,7 +208,7 @@ final class MemberTable extends PowerGridComponent
 
            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($member) => $member->id === 1)
+                ->when(fn($score-member) => $score-member->id === 1)
                 ->hide(),
         ];
     }

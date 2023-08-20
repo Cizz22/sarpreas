@@ -12,11 +12,17 @@ class ScoreMember extends Model
     protected $fillable = [
         'member_id',
         'subunit_id',
+        'coordinator_id',
     ];
 
     public function member()
     {
-        return $this->belongsTo(Member::class);
+        return $this->belongsTo(Member::class, 'member_id');
+    }
+
+    public function coordinator()
+    {
+        return $this->belongsTo(Member::class, 'coordinator_id');
     }
 
     public function subunit()
@@ -27,5 +33,16 @@ class ScoreMember extends Model
     public function scoreDetail()
     {
         return $this->hasMany(ScoreMemberDetail::class);
+    }
+
+    //Create Function to calculate sum score
+    public function sumScore()
+    {
+        $score = $this->scoreDetail()->get();
+        $total = 0;
+        foreach ($score as $s) {
+            $total += $s->score;
+        }
+        return $total;
     }
 }

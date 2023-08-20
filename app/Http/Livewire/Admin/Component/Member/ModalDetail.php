@@ -8,10 +8,19 @@ use LivewireUI\Modal\ModalComponent;
 class ModalDetail extends ModalComponent
 {
     public $member;
-    public $scores;
+
+    public function mount($id)
+    {
+        $this->member = \App\Models\Member::find($id);
+    }
 
     public function render()
     {
         return view('livewire.admin.component.member.modal-detail');
+    }
+
+    public static function modalMaxWidth(): string
+    {
+        return '6xl';
     }
 }

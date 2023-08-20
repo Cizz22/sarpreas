@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Coordinator\Components;
 
 use App\Models\Member;
+use App\Models\PresensiMember;
 use App\Models\ScoreMember;
 use App\Models\Subunit;
 use Livewire\Component;
@@ -10,7 +11,7 @@ use LivewireUI\Modal\ModalComponent;
 
 class ModalScoring extends ModalComponent
 {
-    public $member_id, $instruments, $subunit_id;
+    public $member_id, $instruments, $subunit_id, $presensi;
 
     public function render()
     {
@@ -39,6 +40,7 @@ class ModalScoring extends ModalComponent
         foreach ($this->instruments as $i => $value) {
             $validate['instrument' . $i] = 'required';
         }
+        $validate['presensi'] = 'required';
         $this->validate($validate);
 
         $member = Member::find($this->member_id);
@@ -50,6 +52,14 @@ class ModalScoring extends ModalComponent
         $score = ScoreMember::create([
             'member_id' => $this->member_id,
             'subunit_id' => $this->subunit_id,
+            'coordinator_id' => auth()->user()->member->id,
+        ]);
+
+        $presensi = PresensiMember::create([
+            'member_id' => $this->member_id,
+            'subunit_id' => $this->subunit_id,
+            'coordinator_id' => auth()->user()->member->id,
+            'presensi' => $this->presensi,
         ]);
 
         foreach ($this->instruments as $k => $instrument) {

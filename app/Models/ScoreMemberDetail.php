@@ -24,4 +24,5 @@ class ScoreMemberDetail extends Model
     {
         return $this->belongsTo(Instrument::class);
     }
+
 }

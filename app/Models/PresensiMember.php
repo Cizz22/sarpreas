@@ -10,7 +10,9 @@ class PresensiMember extends Model
     use HasFactory;
 
     protected $fillable = [
-        
-
+        'member_id',
+        'subunit_id',
+        'coordinator_id',
+        'status'
     ];
 }
