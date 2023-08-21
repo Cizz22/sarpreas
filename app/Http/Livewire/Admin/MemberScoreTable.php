@@ -62,7 +62,11 @@ final class MemberScoreTable extends PowerGridComponent
             ->join('members', function ($join) {
                 $join->on('members.id', '=', 'score_members.coordinator_id');
             })
-            ->select('score_members.*', 'subunits.name as subunit_name', 'members.name as coordinator_name');
+            ->join('presensi_members', function ($join) {
+                $join->on('presensi_members.member_id', '=', 'score_members.member_id')
+                    ->where('presensi_members.tanggal_presensi', '=', 'score_members.tanggal_penilaian');
+            })
+            ->select('score_members.*', 'subunits.name as subunit_name', 'members.name as coordinator_name', 'presensi_members.status as presensi');
         return $scoreMember;
     }
 
@@ -101,6 +105,7 @@ final class MemberScoreTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('coordinator_name')
             ->addColumn('subunit_name')
+            ->addColumn('prensensi')
             ->addColumn('tanggal_penilaian')
             ->addColumn('tanggal_penilaian_formatted', fn (ScoreMember $model) => Carbon::parse($model->tanggal_penilaian)->format('d/m/Y'))
             ->addColumn('sum_score', fn (ScoreMember $model) => $model->sumScore());
@@ -139,6 +144,10 @@ final class MemberScoreTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Total Skor', 'sum_score')
+                ->searchable()
+                ->sortable(),
+
+            Column::make('Status Presensi', 'presensi')
                 ->searchable()
                 ->sortable(),
         ];

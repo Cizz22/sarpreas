@@ -13,6 +13,7 @@ class PresensiMember extends Model
         'member_id',
         'subunit_id',
         'coordinator_id',
-        'status'
+        'status',
+        'tanggal_presensi',
     ];
 }
