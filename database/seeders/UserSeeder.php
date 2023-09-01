@@ -38,6 +38,7 @@ class UserSeeder extends Seeder
                 'user_id' => $coordinator->id
             ]);
 
+
             \App\Models\Passcode::generatePasscode($coordinator->id);
         }
 

@@ -49,18 +49,23 @@ class ModalScoring extends ModalComponent
             return $this->addError('member_id', 'Member sudah dinilai');
         }
 
+        $presensi = PresensiMember::create([
+            'member_id' => $this->member_id,
+            'subunits_id' => $this->subunit_id,
+            'coordinator_id' => auth()->user()->member->id,
+            'status' => $this->presensi,
+            'tanggal_presensi' => now(),
+        ]);
+
         $score = ScoreMember::create([
             'member_id' => $this->member_id,
             'subunit_id' => $this->subunit_id,
             'coordinator_id' => auth()->user()->member->id,
+            'presensi_id' => $presensi->id,
+            'tanggal_penilaian' => now(),
         ]);
 
-        $presensi = PresensiMember::create([
-            'member_id' => $this->member_id,
-            'subunit_id' => $this->subunit_id,
-            'coordinator_id' => auth()->user()->member->id,
-            'presensi' => $this->presensi,
-        ]);
+
 
         foreach ($this->instruments as $k => $instrument) {
             $score->scoreDetail()->create([
@@ -69,9 +74,7 @@ class ModalScoring extends ModalComponent
             ]);
         }
 
-        $this->closeModalWithEvents([
-            '$refresh',
-        ]);
+        redirect()->route('dashboard.coordinator.index');
     }
 
     public static function modalMaxWidth(): string

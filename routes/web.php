@@ -49,6 +49,7 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     //Admin
     Route::prefix('admin')->middleware('usertype:admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::post('/report', [DashboardController::class, 'report'])->name('report');
         Route::get('/unit', [UnitController::class, 'index'])->name('unit');
         Route::get('/coordinator', [CoordinatorController::class, 'index'])->name('coordinator');
         Route::get('/member', [MemberController::class, 'index'])->name('member');

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Subunit;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,11 +12,14 @@ use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
+use function PHPSTORM_META\map;
+
 final class SubunitTable extends PowerGridComponent
 {
     use ActionButton;
 
     public $unit_id;
+    public $dataEdit;
 
     /*
     |--------------------------------------------------------------------------
@@ -27,6 +31,26 @@ final class SubunitTable extends PowerGridComponent
     public function setUp(): array
     {
         $this->showCheckBox();
+
+        $coordinator = User::where('roles', 'coordinator')
+            ->doesntHave('member.coordinator')
+            ->with('member')
+            ->get();
+
+        $this->dataEdit = collect([
+            "fields" => [
+                0 => ['name', 'Nama Subunit', 'text'],
+                1 => [
+                    'coordinator_id',
+                    'Koordinator',
+                    'select',
+                    $coordinator,
+                    'subunit'
+                ],
+            ],
+            "model" => "App\Models\Subunit"
+        ]);
+
 
         return [
             Exportable::make('export')
@@ -55,7 +79,7 @@ final class SubunitTable extends PowerGridComponent
     public function datasource(): Builder
     {
         $subunit = Subunit::query()->where('unit_id', $this->unit_id)
-            ->join('members', function ($q) {
+            ->leftjoin('members', function ($q) {
                 $q->on("members.id", "subunits.coordinator_id");
             })
             ->select("subunits.*", "members.name as coordinator", "members.no_hp");
@@ -172,11 +196,13 @@ final class SubunitTable extends PowerGridComponent
                 ->openModal('admin.component.subunit.modal-subunit-member', ['id' => 'id']),
 
             Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
+                ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
 
 
             Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Subunit'])
         ];
     }
 

@@ -14,6 +14,8 @@ use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Heade
 
 final class UnitTable extends PowerGridComponent
 {
+    public $dataEdit;
+
     use ActionButton;
 
     /*
@@ -25,6 +27,13 @@ final class UnitTable extends PowerGridComponent
     */
     public function setUp(): array
     {
+        $this->dataEdit = collect([
+            "fields" => [
+                0 => ['name', 'Nama Unit', 'text']
+            ],
+            "model" => "App\Models\Unit"
+        ]);
+
         return [
             Header::make()->showSearchInput(),
 
@@ -161,11 +170,13 @@ final class UnitTable extends PowerGridComponent
                 ->openModal('admin.component.unit.modal-subunit', ['id' => 'id']),
 
             Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm'),
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
+                ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
 
 
             Button::make('destroy', 'Delete')
                 ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Unit'])
 
         ];
     }

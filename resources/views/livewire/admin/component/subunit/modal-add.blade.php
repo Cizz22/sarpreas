@@ -7,7 +7,7 @@
     <hr />
     <form class="w-full max-w-full" wire:submit.prevent="submit" autocomplete="off">
         <div class="flex flex-wrap mb-6">
-            <x-input-label for="name" value="Nama Unit" />
+            <x-input-label for="name" value="Nama Subunit" />
             <x-text-input id="name" class="block mt-2 w-full" wire:model.lazy="name" type="text"
                 name="name" autofocus />
 

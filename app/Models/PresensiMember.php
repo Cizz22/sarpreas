@@ -11,7 +11,7 @@ class PresensiMember extends Model
 
     protected $fillable = [
         'member_id',
-        'subunit_id',
+        'subunits_id',
         'coordinator_id',
         'status',
         'tanggal_presensi',

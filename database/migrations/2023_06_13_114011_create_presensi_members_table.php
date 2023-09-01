@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('presensi_members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
-            $table->foreignId('subunits_id')->constrained('subunits')->onDelete('cascade');
-            $table->foreignId('coordinator_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('subunits_id')->nullable()->constrained('subunits')->onDelete('set null');
+            $table->foreignId('coordinator_id')->nullable()->constrained('members')->onDelete('set null');
             $table->date('tanggal_presensi')->default(today());
             $table->enum('status', ['hadir', 'izin', 'sakit', 'alpa']);
             $table->string('lat', 100)->nullable();

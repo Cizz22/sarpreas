@@ -2,6 +2,7 @@
     <x-content title="Member">
         {{-- Zip Download Button --}}
         <livewire:admin.member-table />
+
     </x-content>
     @push('js')
         @livewire('livewire-ui-modal')

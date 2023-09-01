@@ -13,6 +13,8 @@ class ScoreMember extends Model
         'member_id',
         'subunit_id',
         'coordinator_id',
+        'tanggal_penilaian',
+        'presensi_id'
     ];
 
     public function member()

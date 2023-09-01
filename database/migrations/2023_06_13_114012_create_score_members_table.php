@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('score_members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
-            $table->foreignId('subunit_id')->constrained('subunits')->onDelete('cascade');
-            $table->foreignId('coordinator_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('subunit_id')->nullable()->constrained('subunits')->onDelete('set null');
+            $table->foreignId('coordinator_id')->nullable()->constrained('members')->onDelete('set null');
+            $table->foreignId('presensi_id')->constrained('presensi_members')->onDelete('cascade');
             $table->date('tanggal_penilaian')->default(today());
             $table->timestamps();
         });

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('squads', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('leader_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('leader_id')->nullable()->constrained('members')->onDelete('set null');
             $table->timestamps();
         });
     }

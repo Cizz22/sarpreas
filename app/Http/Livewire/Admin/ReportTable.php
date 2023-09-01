@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Member;
+use App\Models\ScoreMember;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,12 +11,18 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
-final class MemberTable extends PowerGridComponent
+
+final class ReportTable extends PowerGridComponent
 {
-    public $dataEdit;
-
+    use WithExport;
     use ActionButton;
+    // public string $sortField = 'total_score';
+    // public string $sortDirection = 'desc';
+
+    public $monthInput, $yearInput, $unitInput;
+
 
     /*
     |--------------------------------------------------------------------------
@@ -24,18 +31,8 @@ final class MemberTable extends PowerGridComponent
     | Setup Table's general features
     |
     */
-
     public function setUp(): array
     {
-        $this->showCheckBox();
-
-        $this->dataEdit = collect([
-            "fields" => [
-                0 => ['name', 'Nama', 'text'],
-                1 => ['no_hp', 'No HP', 'text'],
-            ],
-            "model" => "App\Models\Member"
-        ]);
 
         return [
             Exportable::make('export')
@@ -59,23 +56,21 @@ final class MemberTable extends PowerGridComponent
     /**
      * PowerGrid datasource.
      *
-     * @return Builder<\App\Models\Member>
+     * @return Builder<\App\Models\ScoreMember>
      */
     public function datasource(): Builder
     {
-        return Member::query()
-            ->whereRelation('user', 'roles', 'member')
-            ->leftjoin('subunit_members', function ($q) {
+        $data = Member::query()
+            ->join('subunit_members', function ($q) {
                 $q->on("members.id", "subunit_members.memberable_id")
                     ->where('subunit_members.memberable_type', 'App\Models\Member');
             })
-            ->leftjoin('subunits', function ($q) {
-                $q->on("subunits.id", "subunit_members.subunit_id");
-            })
-            ->leftjoin('units', function ($q) {
-                $q->on("units.id", "subunits.unit_id");
-            })
-            ->select('members.*', 'subunits.name as subunit_name', 'units.name as unit_name');
+            ->join('subunits', 'subunit_members.subunit_id', '=', 'subunits.id')
+            ->join('units', 'subunits.unit_id', '=', 'units.id')
+            ->where('units.id', $this->unitInput)
+            ->select('members.*');
+
+        return $data;
     }
 
     /*
@@ -112,13 +107,8 @@ final class MemberTable extends PowerGridComponent
         return PowerGrid::columns()
             ->addColumn('id')
             ->addColumn('name')
-            ->addColumn('no_hp')
-            ->addColumn('unit_name')
-            ->addColumn('unit_name_formatted', fn (Member $model) => $model->unit_name ?? '-')
-            ->addColumn('subunit_name')
-            ->addColumn('subunit_name_formatted', fn (Member $model) => $model->subunit_name ?? '-')
-            ->addColumn('created_at')
-            ->addColumn('created_at_formatted', fn (Member $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
+            ->addColumn('total_score', fn (Member $model) => $model->totalScorebyMonthandYear($this->monthInput, $this->yearInput))
+            ->addColumn('presensi_percentage', fn (Member $model) => $model->totalPercentagePresensibyMonthandYear($this->monthInput, $this->yearInput));
     }
 
     /*
@@ -138,67 +128,16 @@ final class MemberTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
-                ->searchable()
-                ->sortable()
-                ->hidden(),
+
 
             Column::make('Name', 'name')
                 ->searchable()
                 ->sortable(),
 
-            Column::make('No HP', 'no_hp')
-                ->searchable()
+            Column::make('Total Nilai', 'total_score')
                 ->sortable(),
-            Column::make('Unit', 'unit_name_formatted')
-                ->searchable()
-                ->sortable(),
-            Column::make('Subunit', 'subunit_name_formatted')
-                ->searchable()
-                ->sortable(),
-        ];
-    }
 
-    public function header(): array
-    {
-        return [
-            Button::make('add', 'Add')
-                ->class('bg-blue-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.member.modal-add', []),
-
-            Button::make('upload', 'Upload Excel')
-                ->class('bg-green-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.utils.excel-uploader', [
-                    "data" => [
-                        0 => 'name',
-                        1 => 'no_hp',
-                        2 => 'unit_name',
-                        3 => 'subunit_name'
-                    ],
-                    "model" => 'App\Models\Member'
-
-                ]),
-        ];
-
-    }
-
-
-    public function actions(): array
-    {
-        return [
-            Button::make('detail', 'Detail')
-                ->class('bg-green-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-                ->openModal('admin.component.member.modal-detail', ['id' => 'id']),
-
-            Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
-                ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
-
-
-            Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Member'])
-
+            Column::make('Persentase Presensi', 'presensi_percentage')
         ];
     }
 
@@ -207,13 +146,13 @@ final class MemberTable extends PowerGridComponent
      *
      * @return array<int, Filter>
      */
-    // public function filters(): array
-    // {
-    //     return [
-    //         Filter::inputText('name'),
-    //         Filter::datepicker('created_at_formatted', 'created_at'),
-    //     ];
-    // }
+    public function filters(): array
+    {
+        return [
+            Filter::inputText('name'),
+            Filter::datepicker('created_at_formatted', 'created_at'),
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -224,7 +163,7 @@ final class MemberTable extends PowerGridComponent
     */
 
     /**
-     * PowerGrid Member Action Buttons.
+     * PowerGrid ScoreMember Action Buttons.
      *
      * @return array<int, Button>
      */
@@ -235,11 +174,11 @@ final class MemberTable extends PowerGridComponent
        return [
            Button::make('edit', 'Edit')
                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('member.edit', ['member' => 'id']),
+               ->route('score-member.edit', ['score-member' => 'id']),
 
            Button::make('destroy', 'Delete')
                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('member.destroy', ['member' => 'id'])
+               ->route('score-member.destroy', ['score-member' => 'id'])
                ->method('delete')
         ];
     }
@@ -254,7 +193,7 @@ final class MemberTable extends PowerGridComponent
     */
 
     /**
-     * PowerGrid Member Action Rules.
+     * PowerGrid ScoreMember Action Rules.
      *
      * @return array<int, RuleActions>
      */
@@ -266,7 +205,7 @@ final class MemberTable extends PowerGridComponent
 
            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($member) => $member->id === 1)
+                ->when(fn($score-member) => $score-member->id === 1)
                 ->hide(),
         ];
     }

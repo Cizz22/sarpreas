@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="lg:flex items-center justify-between gap-x-3 sm:space-y-4 md:space-y-2 lg:space-y-1">
+    <div class="lg:flex items-center justify-between gap-x-3 sm:space-y-4 md:space-y-2 lg:space-y-1 pb-4">
 
         <x-card type="one">
             <div class="flex-1 text-left">
@@ -49,8 +49,8 @@
                     50%</div>
             </div>
             <div class="text-right">
-                <svg class="fill-current text-pink-600 dark:text-pink-400" xmlns="http://www.w3.org/2000/svg" width="50"
-                    height="50" viewBox="0 0 20 20">
+                <svg class="fill-current text-pink-600 dark:text-pink-400" xmlns="http://www.w3.org/2000/svg"
+                    width="50" height="50" viewBox="0 0 20 20">
                     <title>pin</title>
                     <g>
                         <path d="M11 12h6v-1l-3-1V2l3-1V0H3v1l3 1v8l-3 1v1h6v7l1 1 1-1v-7z"></path>
@@ -81,4 +81,60 @@
         </x-card>
 
     </div>
+    <x-content title="Hasil Penilaian">
+
+        <form class="w-full max-w-full" action="{{ route('dashboard.admin.report') }}" method="post"
+            autocomplete="off">
+            @csrf
+            <div class="flex flex-wrap mb-6">
+                <x-input-label for="unit" value="Unit" />
+
+                <select
+                    class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
+                    name="unit">
+                    <option value="">Pilih Unit</option>
+                    @foreach ($unit as $u)
+                        <option value="{{ $u->id }}">{{ $u->name }}</option>
+                    @endforeach
+                </select>
+
+                <x-input-label for="month" value="Bulan" />
+
+                <select
+                    class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
+                    name="month">
+                    <option value="">Pilih Bulan</option>
+                    @foreach ($month as $m)
+                        <option value="{{ $m->month }}">
+                            {{ \Carbon\Carbon::createFromFormat('m', $m->month)->format('F') }}</option>
+                    @endforeach
+                </select>
+
+                <x-input-label for="name" value="Tahun" />
+
+                <select
+                    class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
+                    name="year">
+                    <option value="">Pilih Tahun</option>
+                    @foreach ($year as $y)
+                        <option value="{{ $y->year }}">
+                            {{ $y->year }}</option>
+                    @endforeach
+                </select>
+                <div class="flex flex-wrap mb-2 justify-end mt-3">
+                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+                        type="submit">
+                        <span>Tampilkan</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+        @if ($userInputProvided)
+            <livewire:admin.report-table monthInput="{{ $monthInput }}" yearInput="{{ $yearInput }}"
+                unitInput="{{ $unitInput }}" />
+        @endif
+    </x-content>
+    @push('js')
+        @livewire('livewire-ui-modal')
+    @endpush
 </x-app-layout>

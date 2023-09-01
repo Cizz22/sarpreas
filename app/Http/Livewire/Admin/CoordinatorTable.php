@@ -14,6 +14,7 @@ use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Heade
 final class CoordinatorTable extends PowerGridComponent
 {
     use ActionButton;
+    public $dataEdit;
 
     /*
     |--------------------------------------------------------------------------
@@ -25,6 +26,14 @@ final class CoordinatorTable extends PowerGridComponent
     public function setUp(): array
     {
         $this->showCheckBox();
+
+        $this->dataEdit = collect([
+            "fields" => [
+                0 => ['name', 'Nama', 'text'],
+                1 => ['no_hp', 'No HP', 'text'],
+            ],
+            "model" => "App\Models\Member"
+        ]);
 
         return [
             Exportable::make('export')
@@ -185,12 +194,13 @@ final class CoordinatorTable extends PowerGridComponent
                 ->openModal('admin.component.coordinator.modal-passcode', ['id' => 'id']),
 
             Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm'),
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
+                ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
 
 
             Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-
+                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Member'])
         ];
     }
 

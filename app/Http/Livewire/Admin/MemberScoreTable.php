@@ -55,18 +55,20 @@ final class MemberScoreTable extends PowerGridComponent
     public function datasource(): Builder
     {
         $scoreMember = ScoreMember::query()
-            ->where('member_id', $this->member_id)
+            ->where('score_members.member_id', $this->member_id)
             ->join('subunits', function ($join) {
                 $join->on('subunits.id', '=', 'score_members.subunit_id');
             })
             ->join('members', function ($join) {
                 $join->on('members.id', '=', 'score_members.coordinator_id');
             })
-            ->join('presensi_members', function ($join) {
-                $join->on('presensi_members.member_id', '=', 'score_members.member_id')
-                    ->where('presensi_members.tanggal_presensi', '=', 'score_members.tanggal_penilaian');
+            ->leftjoin('presensi_members', function ($join) {
+                $join->on('presensi_members.id', '=', 'score_members.presensi_id');
             })
             ->select('score_members.*', 'subunits.name as subunit_name', 'members.name as coordinator_name', 'presensi_members.status as presensi');
+
+
+
         return $scoreMember;
     }
 

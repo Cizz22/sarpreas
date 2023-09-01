@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.12",
         "maatwebsite/excel": "^3.1",
+        "openspout/openspout": "^4",
         "power-components/livewire-powergrid": "^4.8",
         "wire-elements/modal": "^1.0"
     },
