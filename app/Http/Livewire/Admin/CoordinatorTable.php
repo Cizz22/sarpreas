@@ -219,16 +219,16 @@ final class CoordinatorTable extends PowerGridComponent
      * @return array<int, RuleActions>
      */
 
-    /*
+
     public function actionRules(): array
     {
        return [
 
            //Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($member) => $member->id === 1)
+            Rule::button('destroy')
+                ->when(fn($member) => $member->coordinator != null)
                 ->hide(),
         ];
     }
-    */
+
 }

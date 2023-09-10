@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Member;
+use App\Models\Unit;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
@@ -114,7 +115,6 @@ final class MemberTable extends PowerGridComponent
             ->addColumn('name')
             ->addColumn('no_hp')
             ->addColumn('unit_name')
-            ->addColumn('unit_name_formatted', fn (Member $model) => $model->unit_name ?? '-')
             ->addColumn('subunit_name')
             ->addColumn('subunit_name_formatted', fn (Member $model) => $model->subunit_name ?? '-')
             ->addColumn('created_at')
@@ -150,12 +150,9 @@ final class MemberTable extends PowerGridComponent
             Column::make('No HP', 'no_hp')
                 ->searchable()
                 ->sortable(),
-            Column::make('Unit', 'unit_name_formatted')
+            Column::make('Unit', 'unit_name')
                 ->searchable()
-                ->sortable(),
-            Column::make('Subunit', 'subunit_name_formatted')
-                ->searchable()
-                ->sortable(),
+                ->sortable()
         ];
     }
 
@@ -179,7 +176,6 @@ final class MemberTable extends PowerGridComponent
 
                 ]),
         ];
-
     }
 
 
@@ -207,13 +203,15 @@ final class MemberTable extends PowerGridComponent
      *
      * @return array<int, Filter>
      */
-    // public function filters(): array
-    // {
-    //     return [
-    //         Filter::inputText('name'),
-    //         Filter::datepicker('created_at_formatted', 'created_at'),
-    //     ];
-    // }
+    public function filters(): array
+    {
+        return [
+            Filter::select('unit_name', 'units.name')
+                ->dataSource(Unit::select('name')->get())
+                ->optionValue('name')
+                ->optionLabel('name'),
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -259,16 +257,14 @@ final class MemberTable extends PowerGridComponent
      * @return array<int, RuleActions>
      */
 
-    /*
     public function actionRules(): array
     {
-       return [
+        return [
 
-           //Hide button edit for ID 1
+            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($member) => $member->id === 1)
+                ->when(fn ($member) => $member->id === 1)
                 ->hide(),
         ];
     }
-    */
 }

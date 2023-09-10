@@ -11,6 +11,7 @@ module.exports = {
         "./vendor/power-components/livewire-powergrid/src/Themes/Tailwind.php",
         './vendor/wire-elements/modal/resources/views/*.blade.php',
         './storage/framework/views/*.php',
+        "./node_modules/flowbite/**/*.js"
     ],
     presets: [],
     darkMode: "class",

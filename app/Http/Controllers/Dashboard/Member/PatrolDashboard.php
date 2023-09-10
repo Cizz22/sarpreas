@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard\Member;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
+use App\Models\Report;
 use App\Models\SessionSchedule;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
@@ -11,39 +13,34 @@ use Illuminate\Support\Facades\Auth;
 
 class PatrolDashboard extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $patrol_schedule = Auth::user()->member->session_schedule()->where('date', today());
+        $location = Location::query()
+            ->leftjoin('reports', function ($join) use ($request) {
+                $join->on('reports.location_id', '=', 'locations.id')
+                    ->where('reports.session_schedule_id', '=', $request->patrol_schedule->first()->id);
+            })->select('locations.*', 'reports.id as report_id');
 
-        if (!$patrol_schedule->get()) {
-            Auth::logout();
-            return redirect()->route('pick-login');
-        }
-        //Check if user login in right shift time
+        $checkpoints = $location->get();
+        $nullReport = $location->whereNull('reports.id')->first();
 
-        //Pagi => 06:00 - 12:00
-        //Siang => 12:00 - 18:00
-        //Malam => 18:00 - 00:00
-
-        $current_time = Carbon::now();
-        if ($current_time->between(Carbon::parse('06:00'), Carbon::parse('12:00'))) {
-            $shift = 'Pagi';
-        } elseif ($current_time->between(Carbon::parse('12:00'), Carbon::parse('18:00'))) {
-            $shift = 'Siang';
-        } elseif ($current_time->between(Carbon::parse('18:00'), Carbon::parse('23:59'))) {
-            $shift = 'Malam';
-        } else {
-            $shift = 'Invalid Shift'; // Handle cases outside of your specified ranges
-        }
-
-        if ($patrol_schedule->where('shift', $shift)->first()) {
-            return view('dashboard.member.patrol', [
-                'patrol_schedule' => $patrol_schedule->first(),
+        if (!$nullReport) {
+            $request->patrol_schedule->update([
+                'status' => 'Sudah Dilakukan',
+                'end_time' => Carbon::now()->format('H:i:s')
             ]);
-        } else {
-            Auth::logout();
-            return redirect()->route('pick-login');
         }
+
+        if (session('position')) {
+            $default_position = session('position') + 1;
+        }
+
+
+        return view('dashboard.member.patrol', [
+            'patrol_schedule' => $request->patrol_schedule,
+            'checkpoints' => $checkpoints,
+            'default_position' => $default_position ?? 0
+        ]);
     }
 
     public function start_patroli(Request $request)
@@ -52,10 +49,27 @@ class PatrolDashboard extends Controller
 
         $patrol->update([
             'status' => 'Sedang Dilakukan',
-            // 'start_time' => Carbon::now()->format('H:i:s')
+            'start_time' => Carbon::now()->format('H:i:s')
         ]);
 
         $patrol->save();
+
+        return redirect()->route('dashboard.member.patrol');
+    }
+
+    public function checkpoint(Request $request)
+    {
+        Report::create([
+            'unit_id' => Auth::user()->member->unit_id,
+            'session_schedule_id' => $request->patrol_schedule_id,
+            'location_id' => $request->location_id,
+            'situation' => $request->status,
+            'latitude' => $request->lat,
+            'longitude' => $request->long,
+            'additional_information' => $request->keterangan
+        ]);
+
+        session()->flash('position', $request->position);
 
         return redirect()->route('dashboard.member.patrol');
     }

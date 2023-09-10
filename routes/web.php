@@ -70,7 +70,8 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
 
     //Member
     Route::prefix('member')->middleware('usertype:member')->name('member.')->group(function () {
-        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol');
+        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol')->middleware('patrol_member');
         Route::post('/patrol/start', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'start_patroli'])->name('patrol.start');
+        Route::post('/patrol/checkpoint', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'checkpoint'])->name('patrol.checkpoint');
     });
 });

@@ -57,10 +57,6 @@ class Member extends Model
         return $this->session_schedule->where('date', today());
     }
 
-    public function getUnitNameAttribute()
-    {
-        return $this->unit->name;
-    }
 
     public function totalScorebyMonthandYear($month, $year)
     {

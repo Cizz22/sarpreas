@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/apple-touch-icon.png') }}">
@@ -26,6 +27,7 @@
     <!-- Main Styling -->
     <link href="{{ asset('css/styles.css?v=1.0.3') }}" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     <!-- PowerGrid Styles -->
     @livewireStyles
 
@@ -59,7 +61,8 @@
 
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}" async></script>
     <script src="{{ asset('js/perfect-scrollbar.js') }}" async></script>
-    <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js"></script>
+    {{-- <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <script src="{{ asset('js/soft-ui-dashboard-tailwind.js?v=1.0.3') }}" async></script>
     <!-- In your Blade template, include Leaflet CSS and JS -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
