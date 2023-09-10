@@ -9,7 +9,7 @@ use LivewireUI\Modal\ModalComponent;
 
 class ModalSubunitMember extends ModalComponent
 {
-    public $subunit_id;
+    public $subunit_id, $unit_id;
 
     public function render()
     {
@@ -18,6 +18,7 @@ class ModalSubunitMember extends ModalComponent
 
     public function mount($id)
     {
+        $this->unit_id = Subunit::find($id)->unit_id;
         $this->subunit_id = $id;
     }
     public static function modalMaxWidth(): string

@@ -13,7 +13,8 @@ class Member extends Model
     protected $fillable = [
         'name',
         'no_hp',
-        'user_id'
+        'user_id',
+        'unit_id'
     ];
 
     public function user()
@@ -39,6 +40,26 @@ class Member extends Model
     public function presensi()
     {
         return $this->hasMany(PresensiMember::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function session_schedule()
+    {
+        return $this->hasMany(SessionSchedule::class, 'member_1_id');
+    }
+
+    public function get_today_session_schedule()
+    {
+        return $this->session_schedule->where('date', today());
+    }
+
+    public function getUnitNameAttribute()
+    {
+        return $this->unit->name;
     }
 
     public function totalScorebyMonthandYear($month, $year)

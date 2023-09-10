@@ -18,12 +18,14 @@
     <!-- Nucleo Icons -->
     <link href="{{ asset('css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/all.min.css">
     <!-- Popper -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
 
     <link href="{{ asset('css/perfect-scrollbar.css') }}" rel="stylesheet" />
     <!-- Main Styling -->
     <link href="{{ asset('css/styles.css?v=1.0.3') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <!-- PowerGrid Styles -->
     @livewireStyles
 
@@ -33,7 +35,9 @@
 
 <body class="m-0 font-sans antialiased font-normal text-size-base leading-default bg-gray-50 text-slate-500">
     <!-- sidenav  -->
+
     <x-sidebar />
+
 
     <!-- end sidenav -->
 
@@ -45,17 +49,21 @@
 
         <!-- end Navbar -->
 
-        <div class="mx-10 pb-8">
+        <div class="mx-2 xl:mx-10 pb-8">
             {{ $slot }}
         </div>
     </main>
     <!-- plugin for charts  -->
     <script src="{{ asset('js/plugins/chartjs.min.js') }}" async></script>
     <!-- plugin for scrollbar  -->
+
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}" async></script>
     <script src="{{ asset('js/perfect-scrollbar.js') }}" async></script>
     <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js"></script>
     <script src="{{ asset('js/soft-ui-dashboard-tailwind.js?v=1.0.3') }}" async></script>
+    <!-- In your Blade template, include Leaflet CSS and JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
     @vite('resources/js/app.js')
     @livewireScripts
 

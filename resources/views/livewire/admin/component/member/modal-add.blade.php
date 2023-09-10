@@ -29,9 +29,27 @@
                 </p>
             @enderror
         </div>
+        <div class="flex flex-wrap mb-6">
+            <x-input-label for="unit" value="unit" />
+            <select
+                class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
+                name="unit_id" wire:model.lazy="unit_id">
+                <option value="">Pilih Unit</option>
+                @foreach ($units as $c)
+                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                @endforeach
+            </select>
+            @error('unit_id')
+                <p class="text-red-500 text-xs italic mt-4">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
 
         <div class="flex flex-wrap mb-2 justify-end mt-3">
-            <button wire:loading.attr="disabled" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
+            <button wire:loading.attr="disabled"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
                 <span wire:loading.remove>Submit</span>
                 <span wire:loading>
                     <i class="fa fa-spinner fa-spin"></i> Submitting...

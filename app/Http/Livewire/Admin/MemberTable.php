@@ -73,7 +73,7 @@ final class MemberTable extends PowerGridComponent
                 $q->on("subunits.id", "subunit_members.subunit_id");
             })
             ->leftjoin('units', function ($q) {
-                $q->on("units.id", "subunits.unit_id");
+                $q->on("units.id", "members.unit_id");
             })
             ->select('members.*', 'subunits.name as subunit_name', 'units.name as unit_name');
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Unit;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -43,8 +44,8 @@ class UserSeeder extends Seeder
         }
 
         //member
-        for ($i = 1; $i <= 10; $i++) {
-            //Create Coordinator user
+        for ($i = 1; $i <= 30; $i++) {
+            //Create Member user
             $member =  \App\Models\User::create([
                 'name' => 'Member' . $i,
                 'email' => 'member' . $i . '@gmail.com',
@@ -53,10 +54,12 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]);
 
+
             \App\Models\Member::create([
                 'name' => 'Member' . $i,
                 'no_hp' => '0814345678' . $i,
-                'user_id' => $member->id
+                'user_id' => $member->id,
+                'unit_id' => Unit::all()->random()->id
             ]);
 
             \App\Models\Passcode::generatePasscode($member->id);

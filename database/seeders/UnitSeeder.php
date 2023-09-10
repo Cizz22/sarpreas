@@ -13,9 +13,23 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        //Create Unit kebersihan
-        Unit::create([
-            'name' => 'Kebersihan',
-        ]);
+        $default_unit = [
+            [
+                "name" => "Kebersihan"
+            ],
+            [
+                "name" => "SKK Patroli"
+            ],
+            [
+                "name" => "SKK Pos"
+            ],
+            [
+                "name" => "SKK Gedung"
+            ]
+        ];
+
+        foreach ($default_unit as $unit) {
+            Unit::create($unit);
+        }
     }
 }

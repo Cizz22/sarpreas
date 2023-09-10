@@ -78,7 +78,8 @@ final class SubunitTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        $subunit = Subunit::query()->where('unit_id', $this->unit_id)
+        $subunit = Subunit::query()
+            ->where('subunits.unit_id', $this->unit_id)
             ->leftjoin('members', function ($q) {
                 $q->on("members.id", "subunits.coordinator_id");
             })

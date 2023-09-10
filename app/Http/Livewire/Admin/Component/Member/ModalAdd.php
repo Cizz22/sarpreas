@@ -10,10 +10,17 @@ class ModalAdd extends ModalComponent
 {
     public $name;
     public $no_hp;
+    public $unit_id;
+    public $units;
 
     public function render()
     {
         return view('livewire.admin.component.member.modal-add');
+    }
+
+    public function mount()
+    {
+        $this->units = \App\Models\Unit::all();
     }
 
     public function submit()
@@ -21,6 +28,7 @@ class ModalAdd extends ModalComponent
         $this->validate([
             'name' => 'required',
             'no_hp' => 'required',
+            'unit_id' => 'required',
         ]);
 
         //create password at least 8 characters from random string
@@ -36,6 +44,7 @@ class ModalAdd extends ModalComponent
         $user->member()->create([
             'name' => $this->name,
             'no_hp' => $this->no_hp,
+            'unit_id' => $this->unit_id,
         ]);
 
         \App\Models\Passcode::generatePasscode($user->id);

@@ -58,8 +58,7 @@ final class UnitTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        $unit = Unit::query()
-            ->withCount('subunits as subunit_count');
+        $unit = Unit::query();
 
         return $unit;
     }
@@ -98,7 +97,6 @@ final class UnitTable extends PowerGridComponent
         return PowerGrid::columns()
             ->addColumn('id')
             ->addColumn('name')
-            ->addColumn('subunit_count')
             ->addColumn('created_at')
             ->addColumn('created_at_formatted', fn (Unit $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
@@ -125,9 +123,6 @@ final class UnitTable extends PowerGridComponent
                 ->sortable(),
 
             Column::make('Name', 'name')
-                ->searchable()
-                ->sortable(),
-            Column::make('Total Subunit', 'subunit_count')
                 ->searchable()
                 ->sortable(),
         ];
@@ -165,9 +160,13 @@ final class UnitTable extends PowerGridComponent
     public function actions(): array
     {
         return [
-            Button::make('subunits', 'Subunits')
+            Button::make('detail_subunit', 'Detail')
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
                 ->openModal('admin.component.unit.modal-subunit', ['id' => 'id']),
+
+            Button::make('detail_shift', 'Detail')
+                ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
+                ->openModal('admin.component.session-schedule.modal-detail', ['id' => 'id']),
 
             Button::make('edit', 'Edit')
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
@@ -204,16 +203,19 @@ final class UnitTable extends PowerGridComponent
      * @return array<int, RuleActions>
      */
 
-    /*
+
     public function actionRules(): array
     {
-       return [
+        return [
 
-           //Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($unit) => $unit->id === 1)
+            //Hide button edit for ID 1
+            Rule::button('detail_shift')
+                ->when(fn ($unit) => $unit->name == "Kebersihan")
                 ->hide(),
+            Rule::button('detail_subunit')
+                ->when(fn ($unit) => $unit->name != "Kebersihan")
+                ->hide(),
+
         ];
     }
-    */
 }

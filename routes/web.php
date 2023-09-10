@@ -40,8 +40,16 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
                 return redirect(route('dashboard.admin.index'));
             } else if (Auth::user()->roles == 'coordinator') {
                 return redirect(route('dashboard.coordinator.index'));
+            } else if (Auth::user()->roles == 'member') {
+                if (Auth::user()->member->unit->name == 'SKK Patroli') {
+                    return redirect(route('dashboard.member.patrol'));
+                } else {
+                    Auth::logout();
+                    return redirect()->route('passcode');
+                }
             } else {
-                return redirect(route('/'));
+                Auth::logout();
+                return redirect()->route('passcode');
             }
         }
     })->name('index');
@@ -58,5 +66,11 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     //Coordinator
     Route::prefix('coordinator')->middleware('usertype:coordinator')->name('coordinator.')->group(function () {
         Route::get('/', [CoordinatorDashboardController::class, 'index'])->name('index');
+    });
+
+    //Member
+    Route::prefix('member')->middleware('usertype:member')->name('member.')->group(function () {
+        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol');
+        Route::post('/patrol/start', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'start_patroli'])->name('patrol.start');
     });
 });

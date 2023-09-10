@@ -9,17 +9,18 @@ use LivewireUI\Modal\ModalComponent;
 
 class ModalAddSubunitMember extends ModalComponent
 {
-    public $members, $member_id, $subunit_id;
+    public $members, $member_id, $subunit_id, $unit_id;
 
-    public function mount($subunit_id)
+    public function mount($subunit_id, $unit_id)
     {
         $this->subunit_id = $subunit_id;
-        $this->members = User::where('roles', 'member')->doesntHave('member.subunitMember')->get();
+        $this->unit_id = $unit_id;
+        $this->members = User::where('roles', 'member')->doesntHave('member.subunitMember')->whereRelation('member', 'unit_id', $this->unit_id)->get();
     }
 
     public function refreshmembers()
     {
-        $this->members = User::where('roles', 'member')->doesntHave('member.subunitMember')->get();
+        $this->members = User::where('roles', 'member')->doesntHave('member.subunitMember')->whereRelation('member', 'unit_id', $this->unit_id)->get();
     }
 
     public function render()

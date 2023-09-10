@@ -2,8 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Member;
-use App\Models\SubunitMember;
+use App\Models\SessionSchedule;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,11 +10,13 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
-final class SubunitMemberTable extends PowerGridComponent
+final class SessionScheduleTable extends PowerGridComponent
 {
     use ActionButton;
-    public $subunit_id;
+    use WithExport;
+
     public $unit_id;
 
     /*
@@ -51,17 +52,25 @@ final class SubunitMemberTable extends PowerGridComponent
     /**
      * PowerGrid datasource.
      *
-     * @return Builder<\App\Models\Member>
+     * @return Builder<\App\Models\SessionSchedule>
      */
     public function datasource(): Builder
     {
-        $member = SubunitMember::query()->where('subunit_id', $this->subunit_id)
-            ->join('members', function ($q) {
-                $q->on('members.id', 'subunit_members.memberable_id')
-                    ->where('subunit_members.memberable_type', 'App\Models\Member');
-            })->select("members.*");
-
-        return $member;
+        return SessionSchedule::query()
+            ->where('session_schedules.unit_id', $this->unit_id)
+            ->join('members as member_1', function ($join) {
+                $join->on('member_1.id', '=', 'session_schedules.member_1_id');
+            })
+            ->join('users as user_1', function ($join) {
+                $join->on('user_1.id', '=', 'member_1.user_id');
+            })
+            ->join('passcodes', function ($join) {
+                $join->on('passcodes.user_id', '=', 'user_1.id');
+            })
+            ->join('members as member_2', function ($join) {
+                $join->on('member_2.id', '=', 'session_schedules.member_2_id');
+            })
+            ->select('session_schedules.*', 'member_1.name as member_1_name', 'member_2.name as member_2_name', 'passcodes.passcode as pass');
     }
 
     /*
@@ -97,8 +106,28 @@ final class SubunitMemberTable extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('id')
-            ->addColumn('name')
-            ->addColumn('no_hp');
+            ->addColumn('id_formatted', fn (SessionSchedule $model) => "PTR" . $model->id)
+            ->addColumn('member_1_name')
+            ->addColumn('member_2_name')
+            ->addColumn('date')
+            ->addColumn('date_formatted', fn (SessionSchedule $model) => Carbon::parse($model->date)->format('d/m/Y'))
+            ->addColumn('shift')
+            ->addColumn('status', function (SessionSchedule $model) {
+                if ($model->status == "Belum Dilakukan") {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-500 text-white">
+                    Belum Dilakukan
+                  </span>';
+                } else if ($model->status == "Sedang Dilakukan") {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500 text-white">
+                    Sedang Dilakukan
+                  </span>';
+                } else {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-500 text-white">
+                    Sudah Dilakukan
+                  </span>';
+                }
+            })
+            ->addColumn('pass');
     }
 
     /*
@@ -118,30 +147,35 @@ final class SubunitMemberTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
-                ->searchable()
-                ->sortable()
-                ->hidden(),
-
-            Column::make('Name', 'name')
-                ->searchable()
+            Column::make('Patroli ID', 'id_formatted', 'id'),
+            Column::make('Member 1', 'member_1_name'),
+            Column::make('Member 2', 'member_2_name'),
+            Column::make('Tanggal', 'date_formatted', 'date')
                 ->sortable(),
-
-            Column::make('No HP', 'no_hp')
-                ->searchable()
-                ->sortable(),
+            Column::make('Shift', 'shift'),
+            Column::make('Passcodes', 'pass'),
+            Column::make('Status', 'status'),
         ];
     }
 
-
-
+    /**
+     * PowerGrid Filters.
+     *
+     * @return array<int, Filter>
+     */
+    public function filters(): array
+    {
+        return [
+            Filter::datepicker('date_formatted', 'date')
+        ];
+    }
 
     public function header(): array
     {
         return [
             Button::make('add', 'Add')
                 ->class('bg-blue-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.subunit.modal-add-subunit-member', ['subunit_id' => $this->subunit_id, 'unit_id' => $this->unit_id]),
+                ->openModal('admin.component.session-schedule.modal-add', ['unit_id' => $this->unit_id]),
         ];
     }
 
@@ -154,25 +188,21 @@ final class SubunitMemberTable extends PowerGridComponent
     */
 
     /**
-     * PowerGrid Member Action Buttons.
+     * PowerGrid SessionSchedule Action Buttons.
      *
      * @return array<int, Button>
      */
 
+
     public function actions(): array
     {
         return [
-            Button::make('detail', 'Detail')
-                ->class('bg-green-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-                ->openModal('admin.component.coordinator.modal-passcode', ['id' => 'id']),
-
             Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm'),
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm'),
 
 
-            Button::make('destroy', 'Delete')
+            Button::make('delete', 'Delete')
                 ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-
         ];
     }
 
@@ -186,21 +216,32 @@ final class SubunitMemberTable extends PowerGridComponent
     */
 
     /**
-     * PowerGrid Member Action Rules.
+     * PowerGrid SessionSchedule Action Rules.
      *
      * @return array<int, RuleActions>
      */
 
-    /*
+
     public function actionRules(): array
     {
-       return [
+        return [
 
-           //Hide button edit for ID 1
+            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($member) => $member->id === 1)
+                ->when(fn ($session) => $session->status === "Sudah Dilakukan")
                 ->hide(),
+
+            Rule::button('edit')
+                ->when(fn ($session) => $session->status === "Sedang Dilakukan")
+                ->hide(),
+
+            Rule::button('delete')
+                ->when(fn ($session) => $session->status === "Sudah Dilakukan")
+                ->hide(),
+
+            Rule::button('delete')
+                ->when(fn ($session) => $session->status === "Sedang Dilakukan")
+                ->hide()
         ];
     }
-    */
 }
