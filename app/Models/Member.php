@@ -47,6 +47,11 @@ class Member extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function squadMember()
+    {
+        return $this->hasOne(SquadMember::class, 'member_id');
+    }
+
     public function session_schedule()
     {
         return $this->hasMany(SessionSchedule::class, 'member_1_id');

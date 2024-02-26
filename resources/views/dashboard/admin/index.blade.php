@@ -79,10 +79,61 @@
                 </svg>
             </div>
         </x-card>
-
     </div>
-    <x-content title="Hasil Penilaian">
 
+
+    <x-content title="Laporan SKK">
+        <form class="w-full max-w-full" action="{{ route('dashboard.admin.reportSKK') }}" method="post"
+            autocomplete="off">
+            @csrf
+            <div class="flex flex-wrap mb-6">
+                <x-input-label for="unit" value="Unit" />
+
+                <select
+                    class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
+                    name="unit">
+                    <option value="">Pilih Unit</option>
+                    @foreach ($unit as $u)
+                        @if ($u->name == 'Kebersihan')
+                            @continue
+                        @endif
+                        <option value="{{ $u->id }}">{{ $u->name }}</option>
+                    @endforeach
+                </select>
+
+                <x-input-label for="shift" value="Shift" />
+                <select
+                    class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
+                    name="shift">
+                    <option value="">Pilih Unit</option>
+                    <option value="all">Semua shift</option>
+                    <option value="Pagi">Pagi</option>
+                    <option value="Siang">Siang</option>
+                    <option value="Malam">Malam</option>
+                </select>
+
+                <x-input-label for="date" value="Tanggal" />
+
+                <input type="date" name="date"
+                    class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'" />
+
+
+                <div class="flex flex-wrap mb-2 justify-end mt-3">
+                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+                        type="submit">
+                        <span>Tampilkan</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        @if ($userInputProvidedSKK)
+            <livewire:admin.report-s-k-k-table unitInput="{{ $unitInput }}" dateInput="{{ $dateInput }}"
+                shiftInput="{{ $shiftInput }}" />
+        @endif
+    </x-content>
+
+    <x-content title="Hasil Penilaian">
         <form class="w-full max-w-full" action="{{ route('dashboard.admin.report') }}" method="post"
             autocomplete="off">
             @csrf
@@ -129,11 +180,18 @@
                 </div>
             </div>
         </form>
+
         @if ($userInputProvided)
             <livewire:admin.report-table monthInput="{{ $monthInput }}" yearInput="{{ $yearInput }}"
                 unitInput="{{ $unitInput }}" />
         @endif
     </x-content>
+
+
+
+
+
+
     @push('js')
         @livewire('livewire-ui-modal')
     @endpush

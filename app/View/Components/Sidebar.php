@@ -35,6 +35,8 @@ class Sidebar extends Component
         $this->addGeneralSidebarMenu('Member', route('dashboard.admin.member'));
         $this->addGeneralSidebarMenu('Koordinator', route('dashboard.admin.coordinator'));
         $this->addGeneralSidebarMenu('Instrumen', route('dashboard.admin.instrument'));
+        $this->addGeneralSidebarMenu('Kendaraan', route('dashboard.admin.car'));
+        $this->addGeneralSidebarMenu('Pemesanan Kendaraan', route('dashboard.admin.carbooking'));
     }
 
 

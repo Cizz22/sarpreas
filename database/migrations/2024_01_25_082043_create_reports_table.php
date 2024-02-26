@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('session_schedule_id')->constrained('session_schedules')->onDelete('cascade');
-            $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
+            $table->foreignId('location_id')->nullable()->constrained('locations')->onDelete('cascade');
+            $table->time('interval_time');
             $table->foreignId('unit_id')->constrained('units')->onDelete('cascade');
             $table->enum('situation', ['aman', 'terkendala', 'darurat'])->default('aman');
             $table->string('latitude');

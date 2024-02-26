@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
         }
 
         //member
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             //Create Member user
             $member =  \App\Models\User::create([
                 'name' => 'Member' . $i,

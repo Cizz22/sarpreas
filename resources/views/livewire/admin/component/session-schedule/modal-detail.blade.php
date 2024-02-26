@@ -1,6 +1,6 @@
 <div class="p-4 w-100">
     <div class="flex justify-between">
-        <h5 class="text-lg font-weight-bold">Penjadwalan Patroli</h5>
+        <h5 class="text-lg font-weight-bold">Penjadwalan</h5>
         <button type="button" title="Tutup" wire:click="$emit('closeModal')" class="self-start">
             <i class="cil-x"></i></button>
     </div>

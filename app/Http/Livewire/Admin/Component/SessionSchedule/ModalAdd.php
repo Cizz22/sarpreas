@@ -3,13 +3,14 @@
 namespace App\Http\Livewire\Admin\Component\SessionSchedule;
 
 use App\Models\SessionSchedule;
+use App\Models\Unit;
 use App\Models\User;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
 
 class ModalAdd extends ModalComponent
 {
-    public $members, $unit_id, $shift, $date;
+    public $members, $unit_id, $shift, $date, $unit_name;
 
     public $member_1, $member_2;
 
@@ -21,6 +22,7 @@ class ModalAdd extends ModalComponent
     public function mount($unit_id)
     {
         $this->unit_id = $unit_id;
+        $this->unit_name = Unit::find($unit_id)->name;
         $this->members = User::where('roles', 'member')->whereRelation('member', 'unit_id', $this->unit_id)->get();
     }
 
@@ -38,10 +40,14 @@ class ModalAdd extends ModalComponent
             return;
         }
 
-        $isSessionAlreadyExist = SessionSchedule::where('date', $this->date)->where('shift', $this->shift)->first();
+        $isSessionAlreadyExist = SessionSchedule::where('date', $this->date)
+            ->where('shift', $this->shift)
+            ->where('member_1_id', $this->member_1)
+            ->orWhere('member_2_id', $this->member_2)
+            ->first();
 
-        if($isSessionAlreadyExist){
-            $this->addError('date', 'Jadwal yang anda masukkan sudah ada');
+        if ($isSessionAlreadyExist) {
+            $this->addError('date', 'Jadwal dengan anggota pertama atau anggota kedua yang anda masukkan sudah ada');
             return;
         }
 

@@ -1,6 +1,6 @@
 <div class="p-4">
     <div class="flex justify-between">
-        <h5 class="text-lg font-weight-bold">Buat Sesi Patroli Baru</h5>
+        <h5 class="text-lg font-weight-bold">Buat Sesi {{ $unit_name }} Baru</h5>
         <button type="button" title="Tutup" wire:click="$emit('closeModal')" class="self-start">
             <i class="cil-x"></i></button>
     </div>
@@ -38,7 +38,7 @@
             <small>Bila member belum ada silahkan membuat member baru<span>
                     <small class="ml-1 text-blue-700 cursor-pointer" wire:click="refreshmembers">(tekan untuk
                         refresh)</small>
-                    </span></small>
+                </span></small>
             <button onclick="Livewire.emit('openModal', 'admin.component.member.modal-add')"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" type="button">
                 Buat member Baru

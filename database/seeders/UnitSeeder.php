@@ -15,17 +15,14 @@ class UnitSeeder extends Seeder
     {
         $default_unit = [
             [
-                "name" => "Kebersihan"
+                "name" => "Kebersihan Indoor"
             ],
             [
-                "name" => "SKK Patroli"
+                "name" => "Kebersihan Outdoor"
             ],
             [
-                "name" => "SKK Pos"
+                "name" => "SKK"
             ],
-            [
-                "name" => "SKK Gedung"
-            ]
         ];
 
         foreach ($default_unit as $unit) {

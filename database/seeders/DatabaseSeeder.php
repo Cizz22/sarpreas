@@ -23,6 +23,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SubunitSeeder::class,
             LocationSeeder::class,
+            InstrumenSeeder::class,
+            CarSeeder::class,
+            ShiftScheduleSeeder::class,
+            SquadSeeder::class,
+            IntervalScheduleSeeder::class,
         ]);
     }
 }

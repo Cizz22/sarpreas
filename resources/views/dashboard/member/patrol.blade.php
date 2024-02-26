@@ -86,23 +86,26 @@
                                 <p class="font-bold mb-0 mt-2">Nama Lokasi</p>
                                 <p id="lokasi"></p>
                             </div>
+
                             <div id="keterangan_tambahan">
                                 <p class="font-bold mb-0 mt-2">Keterangan Tambahan</p>
 
-                                <textarea rows="3" id="additional_information"
+                                <textarea rows="3" id="additional_infomation_input"
                                     class="rounded-md w-full shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     placeholder="Keterangan tambahan"></textarea>
 
-
+                                <p id="additional_information_p">-</p>
                                 @error('keterangan')
                                     <p class="text-red-500 text-xs italic mt-4">
                                         {{ $message }}
                                     </p>
                                 @enderror
                             </div>
+
                             <div id="situation_button">
                                 <p class="font-bold mb-0 mt-2">Keadaan</p>
-                                <div class="flex justify-evenly">
+                                <p id="situation"></p>
+                                <div class="flex justify-evenly" id="situation_button_input">
                                     <button id="aman"
                                         class="bg-green-500 mb-4 sm:mb-1 w-full sm:w-1/2 cursor-pointer text-center font-bold text-white px-3 py-2.5 m-1 rounded text-sm">
                                         Aman
@@ -112,7 +115,6 @@
                                         Terkendala
                                     </button>
                                 </div>
-
                             </div>
                         </div>
 
@@ -203,107 +205,104 @@
         @livewire('livewire-ui-modal')
 
         <script>
-            window.addEventListener("DOMContentLoaded", function() {
-                const items = []
-                let default_position = {{ $default_position }};
+            const items = []
+            let default_position = {{ $default_position }};
 
-                @foreach ($checkpoints as $checkpoint)
-                    items.push({
-                        location_id: {{ $checkpoint->id }},
-                        position: {{ $loop->index }},
-                        location: "{{ $checkpoint->name }}",
-                        is_done: {{ $checkpoint->report_id ? 'true' : 'false' }},
-                        el: document.getElementById('carousel-item-{{ $loop->index + 1 }}')
-                    })
-                @endforeach
+            @foreach ($checkpoints as $checkpoint)
+                items.push({
+                    location_id: {{ $checkpoint->id }},
+                    position: {{ $loop->index }},
+                    location: "{{ $checkpoint->name }}",
+                    is_done: {{ $checkpoint->report_id ? 'true' : 'false' }},
+                    situasi: "{{ $checkpoint->situation }}",
+                    keterangan: "{{ $checkpoint->additional_information }}",
+                    el: document.getElementById('carousel-item-{{ $loop->index + 1 }}')
+                })
+            @endforeach
 
+            console.log(items)
 
+            const carousel = new Carousel(items, {
+                defaultPosition: default_position
+            });
 
-                const carousel = new Carousel(items, {
-                    defaultPosition: default_position
-                });
+            // set event listeners for prev and next buttons and location
+            const $prevButton = document.getElementById('data-carousel-prev');
+            const $nextButton = document.getElementById('data-carousel-next');
 
-                // set event listeners for prev and next buttons and location
-                const $prevButton = document.getElementById('data-carousel-prev');
-                const $nextButton = document.getElementById('data-carousel-next');
+            const $location = document.getElementById('lokasi');
 
-                const $location = document.getElementById('lokasi');
+            // SET location name
+            $location.innerHTML = carousel._activeItem.location;
 
-                // SET location name
+            showHide(carousel._activeItem.is_done)
+
+            $prevButton.addEventListener('click', () => {
+                carousel.prev();
                 $location.innerHTML = carousel._activeItem.location;
 
+                showHide(carousel._activeItem.is_done)
+            });
 
-                if (carousel._activeItem.is_done) {
-                    document.getElementById('situation_button').style.display = 'none';
-                    document.getElementById('keterangan_tambahan').style.display = 'none';
+            $nextButton.addEventListener('click', () => {
+                carousel.next();
+                $location.innerHTML = carousel._activeItem.location;
+
+                showHide(carousel._activeItem.is_done)
+            });
+
+            function showHide(is_done) {
+                if (is_done) {
+                    document.getElementById('situation_button_input').style.display = 'none';
+                    document.getElementById('situation').innerHTML = carousel._activeItem.situasi;
+
+                    document.getElementById('additional_infomation_input').style.display = 'none';
+                    document.getElementById('additional_information_p').innerHTML = carousel._activeItem.keterangan;
+
                 } else {
-                    document.getElementById('situation_button').style.display = 'block';
-                    document.getElementById('keterangan_tambahan').style.display = 'block';
+                    document.getElementById('situation_button_input').style.display = 'flex';
+                    document.getElementById('situation').innerHTML = "";
+
+                    document.getElementById('additional_infomation_input').style.display = 'flex';
+                    document.getElementById('additional_information_p').innerHTML = "";
                 }
+            }
 
-                $prevButton.addEventListener('click', () => {
-                    carousel.prev();
-                    $location.innerHTML = carousel._activeItem.location;
+            function submitForm(situation) {
+                const form = document.getElementById('patrolForm');
+                const sit = situation
 
-                    if (carousel._activeItem.is_done) {
-                        document.getElementById('situation_button').style.display = 'none';
-                        document.getElementById('keterangan_tambahan').style.display = 'none';
-                    } else {
-                        document.getElementById('situation_button').style.display = 'block';
-                        document.getElementById('keterangan_tambahan').style.display = 'block';
-                    }
-                });
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('status').value = sit;
+                    document.getElementById('keterangan').value = document.getElementById(
+                        'additional_infomation_input').value;
+                    document.getElementById('position').value = carousel._activeItem.position;
+                    document.getElementById('location_id').value = carousel._activeItem.location_id;
+                    document.getElementById('lat').value = position.coords.latitude;
+                    document.getElementById('long').value = position.coords.longitude;
+                    form.submit()
+                })
+            }
 
-                $nextButton.addEventListener('click', () => {
-                    carousel.next();
-                    $location.innerHTML = carousel._activeItem.location;
-
-                    if (carousel._activeItem.is_done) {
-                        document.getElementById('situation_button').style.display = 'none';
-                        document.getElementById('keterangan_tambahan').style.display = 'none';
-                    } else {
-                        document.getElementById('situation_button').style.display = 'block';
-                        document.getElementById('keterangan_tambahan').style.display = 'block';
-                    }
-                });
-
-                function submitForm(situation) {
-                    const form = document.getElementById('patrolForm');
-                    const sit = situation
-
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        document.getElementById('status').value = sit;
-                        document.getElementById('keterangan').value = document.getElementById(
-                            'additional_information').value;
-                        document.getElementById('position').value = carousel._activeItem.position;
-                        document.getElementById('location_id').value = carousel._activeItem.location_id;
-                        document.getElementById('lat').value = position.coords.latitude;
-                        document.getElementById('long').value = position.coords.longitude;
-                        form.submit()
-
-                    })
-                }
-
-                // Aman & Terkendala Button
-                const $amanButton = document.getElementById('aman');
-                const $terkendalaButton = document.getElementById('terkendala');
-                const $checkpoint = document.getElementById('checkpoint');
-                const $loading = document.getElementById('loading')
+            // Aman & Terkendala Button
+            const $amanButton = document.getElementById('aman');
+            const $terkendalaButton = document.getElementById('terkendala');
+            const $checkpoint = document.getElementById('checkpoint');
+            const $loading = document.getElementById('loading')
 
 
 
-                $amanButton.addEventListener('click', () => {
-                    $loading.style.display = "block";
-                    $checkpoint.style.display = "none";
-                    submitForm('aman');
-                });
+            $amanButton.addEventListener('click', () => {
+                $loading.style.display = "block";
+                $checkpoint.style.display = "none";
+                submitForm('aman');
+            });
 
-                $terkendalaButton.addEventListener('click', () => {
-                    $loading.style.display = "block";
-                    $checkpoint.style.display = "none";
-                    submitForm('terkendala');
+            $terkendalaButton.addEventListener('click', () => {
+                $loading.style.display = "block";
+                $checkpoint.style.display = "none";
+                submitForm('terkendala');
 
-                });
             });
         </script>
 

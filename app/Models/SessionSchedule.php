@@ -15,7 +15,9 @@ class SessionSchedule extends Model
         'shift',
         'date',
         'unit_id',
-        'status'
+        'status',
+        'start_time',
+        'end_time'
     ];
 
     public function member_1()

@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('session_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('unit_id')->constrained('units')->onDelete('cascade');
-            $table->foreignId('member_1_id')->constrained('members')->onDelete('cascade');
-            $table->foreignId('member_2_id')->constrained('members')->onDelete('cascade');
-            $table->enum('shift', ['Pagi', 'Siang', 'Malam']);
-            $table->enum('status', ["Belum dilakukan", "Sedang dilakukan", "Sudah Dilakukan"])->default('Belum Dilakukan');
+            $table->foreignId('squad_id')->constrained('squads')->onDelete('cascade');
+            $table->foreignId('interval_schedule_id')->constrained('interval_schedules')->onDelete('cascade');
+            $table->enum('status', ["Belum Dilakukan", "Sedang Dilakukan", "Sudah Dilakukan"])->default('Belum Dilakukan');
             $table->date('date');
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

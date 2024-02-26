@@ -18,8 +18,8 @@ class PatrolDashboard extends Controller
         $location = Location::query()
             ->leftjoin('reports', function ($join) use ($request) {
                 $join->on('reports.location_id', '=', 'locations.id')
-                    ->where('reports.session_schedule_id', '=', $request->patrol_schedule->first()->id);
-            })->select('locations.*', 'reports.id as report_id');
+                    ->where('reports.session_schedule_id', '=', $request->patrol_schedule->id);
+            })->select('locations.*', 'reports.id as report_id', 'reports.situation as situation', 'reports.additional_information as additional_information');
 
         $checkpoints = $location->get();
         $nullReport = $location->whereNull('reports.id')->first();
@@ -31,15 +31,16 @@ class PatrolDashboard extends Controller
             ]);
         }
 
+        $default_position = 0;
+
         if (session('position')) {
             $default_position = session('position') + 1;
         }
 
-
         return view('dashboard.member.patrol', [
             'patrol_schedule' => $request->patrol_schedule,
             'checkpoints' => $checkpoints,
-            'default_position' => $default_position ?? 0
+            'default_position' => $default_position
         ]);
     }
 
@@ -69,8 +70,6 @@ class PatrolDashboard extends Controller
             'additional_information' => $request->keterangan
         ]);
 
-        session()->flash('position', $request->position);
-
-        return redirect()->route('dashboard.member.patrol');
+        return redirect()->route('dashboard.member.patrol')->with('position', $request->position);
     }
 }

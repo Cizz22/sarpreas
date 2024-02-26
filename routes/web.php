@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Dashboard\Admin\CarbookingController;
+use App\Http\Controllers\Dashboard\Admin\CarController;
 use App\Http\Controllers\Dashboard\Admin\CoordinatorController;
 use App\Http\Controllers\Dashboard\Admin\DashboardController;
 use App\Http\Controllers\Dashboard\Admin\InstrumentController;
 use App\Http\Controllers\Dashboard\Admin\MemberController;
 use App\Http\Controllers\Dashboard\Admin\UnitController;
 use App\Http\Controllers\Dashboard\Coordinator\DashboardController as CoordinatorDashboardController;
+use App\Http\Controllers\Guest\CarBooking\FormBookingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +32,14 @@ Route::middleware('guest')->group(function () {
     Route::post('passcode', [AuthController::class, 'passcode_login'])->name('passcode-login');
 });
 
+Route::prefix('peminjaman-kendaraan')->name('peminjaman.')->group(function () {
+    Route::get('form', [App\Http\Controllers\Guest\CarBooking\FormBookingController::class, 'index'])->name('form');
+    Route::post('form/submit', [App\Http\Controllers\Guest\CarBooking\FormBookingController::class, 'submit'])->name('form.submit');
+    Route::get('form/success', [App\Http\Controllers\Guest\CarBooking\FormBookingController::class, 'success'])->name('form.success');
+    Route::get('kendaraan', [App\Http\Controllers\Guest\CarBooking\ListCarController::class, 'index'])->name('list-kendaraan');
+    Route::get('pinjam', [App\Http\Controllers\Guest\CarBooking\FormReturnBorrowController::class, 'index'])->name('form-borrow-return');
+    Route::post('pinjam/submit', [App\Http\Controllers\Guest\CarBooking\FormReturnBorrowController::class, 'submit'])->name('form-borrow.submit');
+});
 
 
 
@@ -43,6 +54,10 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
             } else if (Auth::user()->roles == 'member') {
                 if (Auth::user()->member->unit->name == 'SKK Patroli') {
                     return redirect(route('dashboard.member.patrol'));
+                } elseif (Auth::user()->member->unit->name == 'SKK Pos') {
+                    return redirect(route('dashboard.member.posgedung'));
+                } elseif (Auth::user()->member->unit->name == 'SKK Gedung') {
+                    return redirect(route('dashboard.member.posgedung'));
                 } else {
                     Auth::logout();
                     return redirect()->route('passcode');
@@ -58,10 +73,13 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     Route::prefix('admin')->middleware('usertype:admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::post('/report', [DashboardController::class, 'report'])->name('report');
+        Route::post('/report/skk', [DashboardController::class, 'reportSKK'])->name('reportSKK');
         Route::get('/unit', [UnitController::class, 'index'])->name('unit');
         Route::get('/coordinator', [CoordinatorController::class, 'index'])->name('coordinator');
         Route::get('/member', [MemberController::class, 'index'])->name('member');
         Route::get('/instrument', [InstrumentController::class, 'index'])->name('instrument');
+        Route::get('/carbooking', [CarbookingController::class, 'index'])->name('carbooking');
+        Route::get('/car', [CarController::class, 'index'])->name('car');
     });
     //Coordinator
     Route::prefix('coordinator')->middleware('usertype:coordinator')->name('coordinator.')->group(function () {
@@ -70,8 +88,10 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
 
     //Member
     Route::prefix('member')->middleware('usertype:member')->name('member.')->group(function () {
-        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol')->middleware('patrol_member');
+        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol')->middleware('patrol_member:patrol');
         Route::post('/patrol/start', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'start_patroli'])->name('patrol.start');
         Route::post('/patrol/checkpoint', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'checkpoint'])->name('patrol.checkpoint');
+        Route::get('/posgedung', [App\Http\Controllers\Dashboard\Member\PosgedungDashboard::class, 'index'])->name('posgedung')->middleware('patrol_member:posgedung');
+        Route::post('/posgedung/checkpoint', [App\Http\Controllers\Dashboard\Member\PosgedungDashboard::class, 'checkpoint'])->name('posgedung.checkpoint');
     });
 });

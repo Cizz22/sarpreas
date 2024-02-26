@@ -13,6 +13,7 @@ class Report extends Model
         'unit_id',
         'session_schedule_id',
         'location_id',
+        'interval_time',
         'situation',
         'latitude',
         'longitude',

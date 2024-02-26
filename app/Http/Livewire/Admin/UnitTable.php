@@ -166,7 +166,7 @@ final class UnitTable extends PowerGridComponent
 
             Button::make('detail_shift', 'Detail')
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
-                ->openModal('admin.component.session-schedule.modal-detail', ['id' => 'id']),
+                ->openModal('admin.component.squad.modal-squad', ['id' => 'id']),
 
             Button::make('edit', 'Edit')
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
@@ -210,12 +210,16 @@ final class UnitTable extends PowerGridComponent
 
             //Hide button edit for ID 1
             Rule::button('detail_shift')
-                ->when(fn ($unit) => $unit->name == "Kebersihan")
-                ->hide(),
-            Rule::button('detail_subunit')
-                ->when(fn ($unit) => $unit->name != "Kebersihan")
+                ->when(fn ($unit) => $unit->name == "Kebersihan Indoor")
                 ->hide(),
 
+            Rule::button('detail_shift')
+                ->when(fn ($unit) => $unit->name == "Kebersihan Outdoor")
+                ->hide(),
+
+            Rule::button('detail_subunit')
+                ->when(fn ($unit) => ($unit->name != "Kebersihan Indoor" && $unit->name != "Kebersihan Outdoor"))
+                ->hide()
         ];
     }
 }

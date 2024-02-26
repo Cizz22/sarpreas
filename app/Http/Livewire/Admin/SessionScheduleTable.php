@@ -200,9 +200,9 @@ final class SessionScheduleTable extends PowerGridComponent
             Button::make('edit', 'Edit')
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm'),
 
-
-            Button::make('delete', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+            Button::make('destroy', 'Delete')
+                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\SessionSchedule'])
         ];
     }
 

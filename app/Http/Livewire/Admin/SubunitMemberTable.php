@@ -162,10 +162,6 @@ final class SubunitMemberTable extends PowerGridComponent
     public function actions(): array
     {
         return [
-            Button::make('detail', 'Detail')
-                ->class('bg-green-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-                ->openModal('admin.component.coordinator.modal-passcode', ['id' => 'id']),
-
             Button::make('edit', 'Edit')
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm'),
 
