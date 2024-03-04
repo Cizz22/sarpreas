@@ -26,7 +26,8 @@ final class SquadTable extends PowerGridComponent
     */
     public function setUp(): array
     {
-        $this->showCheckBox();
+        // $this->showCheckBox();
+        // dd($this->unit_id);
 
         $this->dataEdit = collect([
             "fields" => [
@@ -61,7 +62,14 @@ final class SquadTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        return Squad::query();
+        return Squad::query()
+            ->join('users', function ($join) {
+                $join->on('users.id', '=', 'squads.user_id');
+            })
+            ->join('passcodes', function ($join) {
+                $join->on('passcodes.user_id', '=', 'users.id');
+            })
+            ->select('squads.id', 'squads.name as name', 'passcodes.passcode as passcode');
     }
 
     /*
@@ -97,6 +105,7 @@ final class SquadTable extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('id')
+            ->addColumn('passcode')
             ->addColumn('name');
     }
 
@@ -117,13 +126,15 @@ final class SquadTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
-                ->searchable()
-                ->sortable(),
-
             Column::make('Name', 'name')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute(styleAttr: 'width: 60%'),
+
+            Column::make('Passcode', 'passcode')
+                ->searchable()
+                ->sortable()
+                ->headerAttribute(styleAttr: 'width: 20%')
         ];
     }
 
@@ -136,7 +147,7 @@ final class SquadTable extends PowerGridComponent
     {
         return [
             Filter::inputText('name'),
-            Filter::datepicker('created_at_formatted', 'created_at'),
+            // Filter::datepicker('created_at_formatted', 'created_at'),
         ];
     }
 
@@ -159,19 +170,19 @@ final class SquadTable extends PowerGridComponent
         return [
             Button::make('members', 'Squad Members')
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-                ->openModal('admin.component.squad.modal-squad-member', ['id' => 'id']),
+                ->openModal('admin.component.squad.modal-squad-member', ['id' => 'id', 'unit_id' => $this->unit_id]),
 
             Button::make('penjadwalan', 'Penjadwalan')
                 ->class('bg-blue-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
                 ->openModal('admin.component.squad.modal-squad-schedule', ['id' => 'id']),
 
-            Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
-                ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
+            // Button::make('edit', 'Edit')
+            //     ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
+            //     ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
 
-            Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Squad'])
+            // Button::make('destroy', 'Delete')
+            //     ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+            //     ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Squad'])
         ];
     }
 

@@ -10,7 +10,6 @@ class Report extends Model
     use HasFactory;
 
     protected $fillable = [
-        'unit_id',
         'session_schedule_id',
         'location_id',
         'interval_time',

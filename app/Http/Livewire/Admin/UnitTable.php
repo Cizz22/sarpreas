@@ -124,7 +124,8 @@ final class UnitTable extends PowerGridComponent
 
             Column::make('Name', 'name')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute(styleAttr: 'width: 75%'),
         ];
     }
 

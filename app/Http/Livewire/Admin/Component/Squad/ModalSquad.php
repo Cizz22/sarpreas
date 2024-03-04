@@ -16,6 +16,7 @@ class ModalSquad extends ModalComponent
 
     public function mount($id)
     {
+        
         $this->unit_id = $id;
     }
     public static function modalMaxWidth(): string

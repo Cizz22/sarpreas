@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('session_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('squad_id')->constrained('squads')->onDelete('cascade');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
             $table->foreignId('interval_schedule_id')->constrained('interval_schedules')->onDelete('cascade');
             $table->enum('status', ["Belum Dilakukan", "Sedang Dilakukan", "Sudah Dilakukan"])->default('Belum Dilakukan');
-            $table->date('date');
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->nullable(); //Patroli, Pos, Gedung
             $table->timestamps();
         });
     }

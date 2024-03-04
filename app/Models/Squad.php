@@ -12,12 +12,12 @@ class Squad extends Model
     protected $fillable = [
         'name',
         'interval_pattern',
-        'leader_id'
+        'user_id'
     ];
 
-    public function leader()
+    public function users()
     {
-        return $this->belongsTo(Member::class);
+        return $this->hasMany(User::class);
     }
 
     public function squadMember()

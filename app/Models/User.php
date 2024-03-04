@@ -68,4 +68,13 @@ class User extends Authenticatable
     {
         return $this->roles == 'coordinator';
     }
+
+    public function isSquad()
+    {
+        return $this->roles == 'squad';
+    }
+
+    public function squad(){
+        return $this->hasOne(Squad::class);
+    }
 }

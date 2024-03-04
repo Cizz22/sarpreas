@@ -15,11 +15,12 @@ class ModalSquadMember extends ModalComponent
         return view('livewire.admin.component.squad.modal-squad-member');
     }
 
-    public function mount($id)
+    public function mount($id, $unit_id)
     {
-        $this->unit_id = Squad::find($id)->unit_id;
+        $this->unit_id = $unit_id;
         $this->squad_id = $id;
     }
+
     public static function modalMaxWidth(): string
     {
         return '6xl';

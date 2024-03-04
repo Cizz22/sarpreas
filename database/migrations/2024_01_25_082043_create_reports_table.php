@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('session_schedule_id')->constrained('session_schedules')->onDelete('cascade');
             $table->foreignId('location_id')->nullable()->constrained('locations')->onDelete('cascade');
-            $table->time('interval_time');
-            $table->foreignId('unit_id')->constrained('units')->onDelete('cascade');
+            $table->time('interval_time')->nullable();
             $table->enum('situation', ['aman', 'terkendala', 'darurat'])->default('aman');
             $table->string('latitude');
             $table->string('longitude');

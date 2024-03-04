@@ -14,4 +14,19 @@ class IntervalSchedule extends Model
         'shift_schedule_id',
         'date',
     ];
+
+    public function squad()
+    {
+        return $this->belongsTo(Squad::class);
+    }
+
+    public function shiftSchedule()
+    {
+        return $this->belongsTo(ShiftSchedule::class);
+    }
+
+    public function sessionSchedule()
+    {
+        return $this->hasOne(SessionSchedule::class);
+    }
 }

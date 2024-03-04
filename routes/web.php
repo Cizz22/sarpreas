@@ -51,17 +51,8 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
                 return redirect(route('dashboard.admin.index'));
             } else if (Auth::user()->roles == 'coordinator') {
                 return redirect(route('dashboard.coordinator.index'));
-            } else if (Auth::user()->roles == 'member') {
-                if (Auth::user()->member->unit->name == 'SKK Patroli') {
-                    return redirect(route('dashboard.member.patrol'));
-                } elseif (Auth::user()->member->unit->name == 'SKK Pos') {
-                    return redirect(route('dashboard.member.posgedung'));
-                } elseif (Auth::user()->member->unit->name == 'SKK Gedung') {
-                    return redirect(route('dashboard.member.posgedung'));
-                } else {
-                    Auth::logout();
-                    return redirect()->route('passcode');
-                }
+            } else if (Auth::user()->roles == 'squad') {
+                return redirect(route('dashboard.squad.index'));
             } else {
                 Auth::logout();
                 return redirect()->route('passcode');
@@ -87,7 +78,11 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     });
 
     //Member
-    Route::prefix('member')->middleware('usertype:member')->name('member.')->group(function () {
+    Route::prefix('squad')->middleware('usertype:squad')->name('squad.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Dashboard\Squad\DashboardController::class, 'index'])->name('index');
+
+
+        
         Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol')->middleware('patrol_member:patrol');
         Route::post('/patrol/start', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'start_patroli'])->name('patrol.start');
         Route::post('/patrol/checkpoint', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'checkpoint'])->name('patrol.checkpoint');

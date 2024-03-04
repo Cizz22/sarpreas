@@ -15,7 +15,7 @@ class IntervalScheduleSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    use IntervalTrait;
+    // use IntervalTrait;
 
     public function run(): void
     {
@@ -50,5 +50,21 @@ class IntervalScheduleSeeder extends Seeder
                 $date->addDay();
             }
         }
+    }
+
+    public function generateInterval($pattern, $length, $current_interval_length = 0)
+    {
+        $pattern_length = count($pattern);
+
+        # Determine the start position in the pattern
+        $start_position = $current_interval_length % $pattern_length;
+
+        $result_pattern = [];
+
+        for ($i = 0; $i < $length; $i++) {
+            array_push($result_pattern, $pattern[($start_position + $i) % $pattern_length]);
+        }
+
+        return $result_pattern;
     }
 }
