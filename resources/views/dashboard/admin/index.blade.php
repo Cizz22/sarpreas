@@ -10,7 +10,7 @@
             </div>
             <div class="text-right">
                 {{-- <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100"><title>31</title><g><g id="31.-Papers" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path id="Layer-1" stroke="#E4EBF4" stroke-width="4" fill="#E4EBF4" d="M24 90h52v8H24z"></path><path id="Layer-2" stroke="#D1DDEB" stroke-width="4" fill="#D1DDEB" d="M20 82h60v8H20z"></path><path id="Layer-3" stroke="#C1D0E0" stroke-width="4" fill="#C1D0E0" d="M16 74h68v8H16z"></path><path id="Layer-4" stroke="#A4B8CE" stroke-width="4" fill="#A4B8CE" d="M72.069 2L12 2.18v71.895h76V17.758L72.25 2.18z"></path><path id="Layer-5" stroke="#8DA1B7" stroke-width="4" fill="#8DA1B7" d="M88 18H72V2z"></path></g></g></svg> --}}
-                {{-- <svg class="fill-current text-yellow-500 dark:text-yellow-400" xmlns="http://www.w3.org/2000/svg"
+        {{-- <svg class="fill-current text-yellow-500 dark:text-yellow-400" xmlns="http://www.w3.org/2000/svg"
                     width="50" height="50" viewBox="0 0 20 20">
                     <title>inbox-download</title>
                     <g fill="text-orange-400">
@@ -25,20 +25,17 @@
 
 
     <x-content title="Laporan SKK">
-        <form class="w-full max-w-full" action="{{ route('dashboard.admin.reportSKK') }}" method="post"
-            autocomplete="off">
+        <form class="w-full max-w-full" action="{{ route('dashboard.admin.reportSKK') }}" method="post" autocomplete="off">
             @csrf
             <div class="flex flex-wrap mb-6">
                 <x-input-label for="unit" value="Unit" />
 
                 <select
                     class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
-                    name="unit">
-                    <option value="">Pilih Unit</option>
-                    @foreach ($unit as $u)
-                        @if ($u->name == 'Kebersihan')
-                            @continue
-                        @endif
+                    name="regu">
+                    <option value="">Pilih Regu</option>
+                    <option value="-1">Semua Regu</option>
+                    @foreach ($squad as $u)
                         <option value="{{ $u->id }}">{{ $u->name }}</option>
                     @endforeach
                 </select>
@@ -47,7 +44,7 @@
                 <select
                     class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"
                     name="shift">
-                    <option value="">Pilih Unit</option>
+                    <option value="">Pilih Shift</option>
                     <option value="all">Semua shift</option>
                     <option value="Pagi">Pagi</option>
                     <option value="Siang">Siang</option>
@@ -70,7 +67,7 @@
         </form>
 
         @if ($userInputProvidedSKK)
-            <livewire:admin.report-s-k-k-table unitInput="{{ $unitInput }}" dateInput="{{ $dateInput }}"
+            <livewire:admin.report-s-k-k-table regu="{{ $regu }}" dateInput="{{ $dateInput }}"
                 shiftInput="{{ $shiftInput }}" />
         @endif
     </x-content>
@@ -87,6 +84,7 @@
                     name="unit">
                     <option value="">Pilih Unit</option>
                     @foreach ($unit as $u)
+                        @if($u->name == 'SKK') @continue @endif
                         <option value="{{ $u->id }}">{{ $u->name }}</option>
                     @endforeach
                 </select>

@@ -30,10 +30,9 @@ final class SubunitTable extends PowerGridComponent
     */
     public function setUp(): array
     {
-        $this->showCheckBox();
+
 
         $coordinator = User::where('roles', 'coordinator')
-            ->doesntHave('member.coordinator')
             ->with('member')
             ->get();
 
@@ -53,9 +52,7 @@ final class SubunitTable extends PowerGridComponent
 
 
         return [
-            Exportable::make('export')
-                ->striped()
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
+
             Header::make()->showSearchInput(),
             Footer::make()
                 ->showPerPage()
@@ -123,6 +120,7 @@ final class SubunitTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('name')
             ->addColumn('coordinator')
+            ->addColumn('detail_location')
             ->addColumn('no_hp')
             ->addColumn('created_at')
             ->addColumn('created_at_formatted', fn (Subunit $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
@@ -155,7 +153,7 @@ final class SubunitTable extends PowerGridComponent
             Column::make('Nama Koordinator', 'coordinator')
                 ->searchable()
                 ->sortable(),
-            Column::make('No HP Koordinator', 'no_hp')
+            Column::make('Lokasi', 'detail_location')
                 ->searchable()
                 ->sortable(),
         ];

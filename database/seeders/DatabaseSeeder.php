@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UnitSeeder::class,
             UserSeeder::class,
-            SubunitSeeder::class,
             LocationSeeder::class,
             InstrumenSeeder::class,
             CarSeeder::class,
             ShiftScheduleSeeder::class,
             SquadSeeder::class,
+            SubunitSeeder::class,
             IntervalScheduleSeeder::class,
         ]);
     }

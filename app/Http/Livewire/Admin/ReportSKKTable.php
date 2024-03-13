@@ -22,7 +22,7 @@ final class ReportSKKTable extends PowerGridComponent
     // public string $sortField = 'total_score';
     // public string $sortDirection = 'desc';
 
-    public $dateInput, $shiftInput, $unitInput;
+    public $dateInput, $shiftInput, $reguInput;
 
     /*
     |--------------------------------------------------------------------------

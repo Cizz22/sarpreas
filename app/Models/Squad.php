@@ -30,6 +30,31 @@ class Squad extends Model
         return $this->hasMany(IntervalSchedule::class);
     }
 
+    public function getTodayIntervalScheduleId()
+    {
+        //Get Current Date with format '2024-03-17'
+        $date = date('Y-m-d');
+
+        //Get Interval
+        $interval = $this->intervalSchedule()->where('date', $date)->first();
+
+        return $interval;
+    }
+
+    public function getTodaySession($type){
+        $interval = $this->getTodayIntervalScheduleId();
+        if($interval)
+        {
+            return $interval->sessionSchedule()->where('type', $type)->first();
+        }
+        return null;
+    }
+
+    public function sessionSchedule()
+    {
+        return $this->hasMany(SessionSchedule::class);
+    }
+
     public static function intervalPattern($squad_name)
     {
         $squads = [

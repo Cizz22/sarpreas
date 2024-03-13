@@ -35,7 +35,7 @@
     @stack('css')
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-800 h-screen antialiased leading-none">
+<body class="bg-gray-50 dark:bg-gray-800 antialiased leading-none h-screen">
     <div id="app">
         {{ $slot }}
     </div>

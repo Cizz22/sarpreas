@@ -67,8 +67,7 @@ final class MemberTable extends PowerGridComponent
         return Member::query()
             ->whereRelation('user', 'roles', 'member')
             ->leftjoin('subunit_members', function ($q) {
-                $q->on("members.id", "subunit_members.memberable_id")
-                    ->where('subunit_members.memberable_type', 'App\Models\Member');
+                $q->on("members.id", "subunit_members.member_id");
             })
             ->leftjoin('subunits', function ($q) {
                 $q->on("subunits.id", "subunit_members.subunit_id");
@@ -146,13 +145,12 @@ final class MemberTable extends PowerGridComponent
             Column::make('Name', 'name')
                 ->searchable()
                 ->sortable(),
-
-            Column::make('No HP', 'no_hp')
-                ->searchable()
-                ->sortable(),
             Column::make('Unit', 'unit_name')
                 ->searchable()
-                ->sortable()
+                ->sortable(),
+            Column::make('Subunit', 'subunit_name_formatted')
+                ->searchable()
+                ->sortable(),
         ];
     }
 

@@ -15,17 +15,19 @@ class PatrolDashboard extends Controller
 {
     public function index(Request $request)
     {
+        $patrol_schedule = auth()->user()->squad->getTodaySession('patroli');
+
         $location = Location::query()
-            ->leftjoin('reports', function ($join) use ($request) {
+            ->leftjoin('reports', function ($join) use ($patrol_schedule) {
                 $join->on('reports.location_id', '=', 'locations.id')
-                    ->where('reports.session_schedule_id', '=', $request->patrol_schedule->id);
+                    ->where('reports.session_schedule_id', '=', $patrol_schedule->id);
             })->select('locations.*', 'reports.id as report_id', 'reports.situation as situation', 'reports.additional_information as additional_information');
 
         $checkpoints = $location->get();
         $nullReport = $location->whereNull('reports.id')->first();
 
         if (!$nullReport) {
-            $request->patrol_schedule->update([
+            $patrol_schedule->update([
                 'status' => 'Sudah Dilakukan',
                 'end_time' => Carbon::now()->format('H:i:s')
             ]);
@@ -38,30 +40,29 @@ class PatrolDashboard extends Controller
         }
 
         return view('dashboard.member.patrol', [
-            'patrol_schedule' => $request->patrol_schedule,
+            'patrol_schedule' => $patrol_schedule,
             'checkpoints' => $checkpoints,
             'default_position' => $default_position
         ]);
     }
 
-    public function start_patroli(Request $request)
-    {
-        $patrol = SessionSchedule::find($request->patrol_schedule_id);
+    // public function start_patroli(Request $request)
+    // {
+    //     $patrol = SessionSchedule::find($request->patrol_schedule_id);
 
-        $patrol->update([
-            'status' => 'Sedang Dilakukan',
-            'start_time' => Carbon::now()->format('H:i:s')
-        ]);
+    //     $patrol->update([
+    //         'status' => 'Sedang Dilakukan',
+    //         'start_time' => Carbon::now()->format('H:i:s')
+    //     ]);
 
-        $patrol->save();
+    //     $patrol->save();
 
-        return redirect()->route('dashboard.member.patrol');
-    }
+    //     return redirect()->route('dashboard.member.patrol');
+    // }
 
     public function checkpoint(Request $request)
     {
         Report::create([
-            'unit_id' => Auth::user()->member->unit_id,
             'session_schedule_id' => $request->patrol_schedule_id,
             'location_id' => $request->location_id,
             'situation' => $request->status,

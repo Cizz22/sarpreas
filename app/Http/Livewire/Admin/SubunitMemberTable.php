@@ -27,12 +27,12 @@ final class SubunitMemberTable extends PowerGridComponent
     */
     public function setUp(): array
     {
-        $this->showCheckBox();
+        // $this->showCheckBox();
 
         return [
-            Exportable::make('export')
-                ->striped()
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
+            // Exportable::make('export')
+            //     ->striped()
+            //     ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
             Header::make()->showSearchInput(),
             Footer::make()
                 ->showPerPage()
@@ -57,9 +57,8 @@ final class SubunitMemberTable extends PowerGridComponent
     {
         $member = SubunitMember::query()->where('subunit_id', $this->subunit_id)
             ->join('members', function ($q) {
-                $q->on('members.id', 'subunit_members.memberable_id')
-                    ->where('subunit_members.memberable_type', 'App\Models\Member');
-            })->select("members.*");
+                $q->on('members.id', 'subunit_members.member_id');
+            })->select("members.name as name", "subunit_members.*");
 
         return $member;
     }
@@ -125,11 +124,12 @@ final class SubunitMemberTable extends PowerGridComponent
 
             Column::make('Name', 'name')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute(styleAttr: 'width: 80%')
 
-            Column::make('No HP', 'no_hp')
-                ->searchable()
-                ->sortable(),
+            // Column::make('No HP', 'no_hp')
+            //     ->searchable()
+            //     ->sortable(),
         ];
     }
 
@@ -162,13 +162,9 @@ final class SubunitMemberTable extends PowerGridComponent
     public function actions(): array
     {
         return [
-            Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm'),
-
-
             Button::make('destroy', 'Delete')
                 ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\SubunitMember'])
         ];
     }
 

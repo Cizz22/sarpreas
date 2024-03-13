@@ -15,8 +15,6 @@ class PosGedungDashboard extends Controller
 
     public function index(Request $request)
     {
-
-
         // $checkpoints = $location->get();
         // $nullReport = $location->whereNull('reports.id')->first();
 
@@ -26,13 +24,17 @@ class PosGedungDashboard extends Controller
         //         'end_time' => Carbon::now()->format('H:i:s')
         //     ]);
         // }
-        $checkpoints = $this->makeIntervals($request->start_time, $request->end_time, $request->patrol_schedule->id);
+        $session_schedule = auth()->user()->squad->getTodaySession($request->type);
+        $start_time = $session_schedule->intervalSchedule->shiftSchedule->start_time;
+        $end_time = $session_schedule->intervalSchedule->shiftSchedule->end_time;
+
+        $checkpoints = $this->makeIntervals($start_time, $end_time, $session_schedule->id);
 
         $default_position = 0;
 
         //check if any is_done in all checkpoint in checkpoints already true
         if (!$checkpoints->where('is_done', false)->count() > 0) {
-            $request->patrol_schedule->update([
+            $session_schedule->update([
                 'status' => 'Sudah Dilakukan',
                 'end_time' => Carbon::now()->format('H:i:s')
             ]);
@@ -43,30 +45,30 @@ class PosGedungDashboard extends Controller
         }
 
         return view('dashboard.member.posgedung', [
-            'patrol_schedule' => $request->patrol_schedule,
+            'patrol_schedule' => $session_schedule,
             'checkpoints' => $checkpoints,
-            'default_position' => $default_position
+            'default_position' => $default_position,
+            'type' => $request->type
         ]);
     }
 
-    public function start_patroli(Request $request)
-    {
-        $patrol = SessionSchedule::find($request->patrol_schedule_id);
+    // public function start_patroli(Request $request)
+    // {
+    //     $patrol = SessionSchedule::find($request->patrol_schedule_id);
 
-        $patrol->update([
-            'status' => 'Sedang Dilakukan',
-            'start_time' => Carbon::now()->format('H:i:s')
-        ]);
+    //     $patrol->update([
+    //         'status' => 'Sedang Dilakukan',
+    //         'start_time' => Carbon::now()->format('H:i:s')
+    //     ]);
 
-        $patrol->save();
+    //     $patrol->save();
 
-        return redirect()->route('dashboard.member.posgedung');
-    }
+    //     return redirect()->route('dashboard.member.posgedung');
+    // }
 
     public function checkpoint(Request $request)
     {
         Report::create([
-            'unit_id' => Auth::user()->member->unit_id,
             'session_schedule_id' => $request->patrol_schedule_id,
             'interval_time' => $request->interval,
             'situation' => $request->status,
@@ -75,7 +77,7 @@ class PosGedungDashboard extends Controller
             'additional_information' => $request->keterangan
         ]);
 
-        return redirect()->route('dashboard.member.posgedung')->with('position', $request->position);
+        return redirect()->route('dashboard.member.posgedung', ['type' => $request->type])->with('position', $request->position);
     }
 
     public function makeIntervals($start_time, $end_time, $session_schedule_id)

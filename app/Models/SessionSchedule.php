@@ -21,4 +21,9 @@ class SessionSchedule extends Model
     {
         return $this->belongsTo(IntervalSchedule::class);
     }
+
+    public function members()
+    {
+        return $this->hasMany(SessionScheduleMember::class);
+    }
 }

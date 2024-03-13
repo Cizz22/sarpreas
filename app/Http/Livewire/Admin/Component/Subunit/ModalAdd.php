@@ -14,12 +14,12 @@ class ModalAdd extends ModalComponent
     public function mount($unit_id)
     {
         $this->unit_id = $unit_id;
-        $this->coordinators = User::where('roles', 'coordinator')->doesntHave('member.coordinator')->get();
+        $this->coordinators = User::where('roles', 'coordinator')->get();
     }
 
     public function refreshCoordinators()
     {
-        $this->coordinators = User::where('roles', 'coordinator')->doesntHave('member.coordinator')->get();
+        $this->coordinators = User::where('roles', 'coordinator')->get();
     }
 
     public function render()

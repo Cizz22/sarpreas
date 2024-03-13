@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subunit_members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subunit_id')->constrained('subunits')->onDelete('cascade');
-            $table->morphs('memberable');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
             $table->timestamps();
         });
     }

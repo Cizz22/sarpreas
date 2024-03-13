@@ -24,7 +24,7 @@ class Member extends Model
 
     public function subunitMember()
     {
-        return $this->morphOne(SubunitMember::class, 'memberable');
+        return $this->hasOne(SubunitMember::class, 'member_id');
     }
 
     public function coordinator()
@@ -52,10 +52,15 @@ class Member extends Model
         return $this->hasOne(SquadMember::class, 'member_id');
     }
 
-    public function session_schedule()
+    public function sessionScheduleMember()
     {
-        return $this->hasMany(SessionSchedule::class, 'member_1_id');
+        return $this->hasMany(SessionScheduleMember::class, 'member_id');
     }
+
+    // public function session_schedule()
+    // {
+    //     return $this->hasMany(SessionSchedule::class, 'member_1_id');
+    // }
 
     public function get_today_session_schedule()
     {

@@ -26,7 +26,6 @@
                                     @case('subunit')
                                         <option value="{{ $c['member']['id'] }}">{{ $c['name'] }}</option>
                                     @break
-
                                     @case('instrument')
                                     @break
 

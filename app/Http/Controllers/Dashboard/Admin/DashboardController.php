@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ScoreMember;
 use App\Models\SessionSchedule;
+use App\Models\Squad;
 use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class DashboardController extends Controller
     {
         $month = $this->getAllMonth();
         $year = $this->getAllYear();
-        $unit = $this->getAllUnit();
+        $squad = $this->getAllSquad();
+        $unit = Unit::all();
 
         //If redirect from report
         if (request()->has('month') && request()->has('year') && request()->has('unit')) {
@@ -30,22 +32,22 @@ class DashboardController extends Controller
             $userInputProvided = true;
             $userInputProvidedSKK = false;
 
-            return view('dashboard.admin.index', compact('monthInput', 'yearInput', 'unitInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit'));
-        } else if (request()->has('date') && request()->has('shift') && request()->has('unit')) {
+            return view('dashboard.admin.index', compact('monthInput', 'yearInput', 'unitInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit', 'squad'));
+        } else if (request()->has('date') && request()->has('shift') && request()->has('regu')) {
             $dateInput = request()->date;
             $shiftInput = request()->shift;
-            $unitInput = request()->unit;
+            $reguInput = request()->regu;
 
             $userInputProvidedSKK = true;
             $userInputProvided = false;
 
-            return view('dashboard.admin.index', compact('dateInput', 'shiftInput', 'unitInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit'));
+            return view('dashboard.admin.index', compact('dateInput', 'reguInput', 'shiftInput', 'unitInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit', 'squad'));
         }
 
         $userInputProvided = false;
         $userInputProvidedSKK = false;
 
-        return view('dashboard.admin.index', compact('month', 'year', 'unit', 'userInputProvided', 'userInputProvidedSKK'));
+        return view('dashboard.admin.index', compact('month', 'unit', 'year', 'squad', 'userInputProvided', 'userInputProvidedSKK'));
     }
 
     public function report(Request $request)
@@ -91,8 +93,9 @@ class DashboardController extends Controller
 
     public function getAllMonth()
     {
-        $month = ScoreMember::selectRaw('MONTH(created_at) as month')
-            ->distinct()
+        //Chang eto postresql
+        $month = ScoreMember::selectRaw('EXTRACT(MONTH FROM created_at) as month')
+            ->groupBy('month')
             ->orderBy('month')
             ->get();
 
@@ -101,19 +104,18 @@ class DashboardController extends Controller
 
     public function getAllYear()
     {
-        $year = ScoreMember::selectRaw('YEAR(created_at) as year')
-            ->distinct()
+        $year = ScoreMember::selectRaw('EXTRACT(YEAR FROM created_at) as year')
+            ->groupBy('year')
             ->orderBy('year')
             ->get();
 
         return $year;
     }
 
-    public function getAllUnit()
+    public function getAllSquad()
     {
-        $unit = Unit::select('id', 'name')
-            ->get();
+        $squad = Squad::all();
 
-        return $unit;
+        return $squad;
     }
 }

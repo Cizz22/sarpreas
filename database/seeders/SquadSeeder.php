@@ -27,8 +27,8 @@ class SquadSeeder extends Seeder
         for ($i = 0; $i < 6; $i++) {
             //Create Account for each squad
             $squad = User::create([
-                'name' => $squads[$i][0] . '_Gedung',
-                'email' => $squads[$i][0] . '_Gedung' . '@gmail.com',
+                'name' => $squads[$i][0],
+                'email' => $squads[$i][0]. '@gmail.com',
                 'password' => bcrypt('password'),
                 'roles' => 'squad',
                 'email_verified_at' => now(),

@@ -11,8 +11,7 @@ class SubunitMember extends Model
 
     protected $fillable = [
         'subunit_id',
-        'memberable_id',
-        'memberable_type'
+        'member_id',
     ];
 
     public function subunit()
@@ -20,8 +19,7 @@ class SubunitMember extends Model
         return $this->belongsTo(Subunit::class);
     }
 
-    public function memberable()
-    {
-        return $this->morphTo();
+    public function member(){
+        return $this->belongsTo(Member::class);
     }
 }

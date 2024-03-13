@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test_import', [App\Http\Controllers\TestImport::class, 'index']);
+
+
 //Auth Route
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'pickLogin'])->name('pick-login');
@@ -80,13 +83,14 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     //Member
     Route::prefix('squad')->middleware('usertype:squad')->name('squad.')->group(function () {
         Route::get('/', [App\Http\Controllers\Dashboard\Squad\DashboardController::class, 'index'])->name('index');
+        Route::post('/patrol', [App\Http\Controllers\Dashboard\Squad\DashboardController::class, 'start'])->name('start.patrol');
+    });
 
-
-        
-        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol')->middleware('patrol_member:patrol');
+    Route::prefix('member')->name('member.')->group(function() {
+        Route::get('/patrol', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'index'])->name('patrol');
         Route::post('/patrol/start', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'start_patroli'])->name('patrol.start');
         Route::post('/patrol/checkpoint', [App\Http\Controllers\Dashboard\Member\PatrolDashboard::class, 'checkpoint'])->name('patrol.checkpoint');
-        Route::get('/posgedung', [App\Http\Controllers\Dashboard\Member\PosgedungDashboard::class, 'index'])->name('posgedung')->middleware('patrol_member:posgedung');
+        Route::get('/posgedung', [App\Http\Controllers\Dashboard\Member\PosgedungDashboard::class, 'index'])->name('posgedung');
         Route::post('/posgedung/checkpoint', [App\Http\Controllers\Dashboard\Member\PosgedungDashboard::class, 'checkpoint'])->name('posgedung.checkpoint');
     });
 });

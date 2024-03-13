@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire\Admin\Component\Utils;
 
+use App\Models\SubunitMember;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use PHPUnit\Event\Code\Throwable;
 
 class ModalDelete extends ModalComponent
 {
@@ -22,23 +24,20 @@ class ModalDelete extends ModalComponent
     public function delete()
     {
         try {
-            $this->model->delete();
-
             if ($this->model instanceof \App\Models\Member) {
                 $this->model->user->delete();
-
                 if ($this->model->subunitMember) {
                     $this->model->subunitMember->delete();
                 }
             }
 
-
+            $this->model->delete();
 
             $this->closeModalWithEvents([
                 'pg:eventRefresh-default',
             ]);
         } catch (\Throwable $th) {
-            dd($th);
+            dd($this->model->id);
         }
     }
 }

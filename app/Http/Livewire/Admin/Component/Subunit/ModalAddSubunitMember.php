@@ -35,8 +35,7 @@ class ModalAddSubunitMember extends ModalComponent
         ]);
 
         SubunitMember::create([
-            'memberable_id' => $this->member_id,
-            'memberable_type' => 'App\Models\Member',
+            'member_id' => $this->member_id,
             'subunit_id' => $this->subunit_id,
         ]);
 

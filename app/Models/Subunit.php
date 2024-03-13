@@ -11,6 +11,7 @@ class Subunit extends Model
 
     protected $fillable = [
         'name',
+        'detail_location', // Change 'detail_location' from 'location' to 'detail_location
         'unit_id',
         'coordinator_id'
     ];

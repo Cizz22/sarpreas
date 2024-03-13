@@ -15,7 +15,7 @@ module.exports = {
     presets: [
         require("./vendor/power-components/livewire-powergrid/tailwind.config.js"),
     ],
-    darkMode: "class",
+    // darkMode: "class",
     safelist: [{
         pattern: /max-w-(sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)/,
         variants: ["sm", "md", "lg", "xl", "2xl"],
@@ -1656,6 +1656,7 @@ module.exports = {
     ],
 
     plugins: [
+        // require("daisyui"),
         require('@tailwindcss/forms'),
         require("flowbite/plugin"),
         require("tailwind-scrollbar"),
