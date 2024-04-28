@@ -52,6 +52,8 @@ class IndoorSheet implements ToCollection
                     'coordinator_id' => $coordinator->id
                 ]);
 
+                \App\Models\Passcode::generatePasscode($coordinator_user->id);
+
                 $this->subunit_id = $subunit->id;
             } else {
                 // Create Member

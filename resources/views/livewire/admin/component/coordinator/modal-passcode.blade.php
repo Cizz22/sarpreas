@@ -18,14 +18,6 @@
                 </p>
             @enderror
         </div>
-        <div class="flex flex-wrap mb-2 justify-end mt-3">
-            <button wire:loading.attr="disabled" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
-                <span wire:loading.remove>Submit</span>
-                <span wire:loading>
-                    <i class="fa fa-spinner fa-spin"></i> Revealing...
-                </span>
-            </button>
-        </div>
     </form>
     <hr />
     <div class="px-4 mt-4">

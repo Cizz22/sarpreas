@@ -16,7 +16,7 @@ class SubunitSeeder extends Seeder
     public function run(): void
     {
         $import = new SubunitMemberImport();
-        $import->onlySheets('Member Subunit Indoor', 'SKK');
+        $import->onlySheets('Member Subunit Indoor', 'SKK', 'data input member outdoor');
 
         Excel::import($import, public_path('data/data.xlsx'));
 

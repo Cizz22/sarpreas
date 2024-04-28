@@ -58,6 +58,7 @@ final class SquadSchedule extends PowerGridComponent
         $interval = IntervalSchedule::query()
             ->where('squad_id', $this->squad_id)
             ->whereMonth('date', Carbon::now()->month)
+            ->whereYear('date', Carbon::now()->year)
             ->join('shift_schedules', function ($join) {
                 $join->on('shift_schedules.id', '=', 'interval_schedules.shift_schedule_id');
             })

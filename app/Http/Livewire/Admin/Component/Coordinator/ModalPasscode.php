@@ -13,23 +13,10 @@ class ModalPasscode extends ModalComponent
 
     public function mount($id)
     {
-        $this->passcode = "-";
+        $this->passcode = $this->coordinator->user->passcode->passcode;;
         $this->coordinator = Member::find($id);
     }
 
-    public function submit()
-    {
-        $this->validate([
-            'password' => 'required',
-        ]);
-
-        $checkPassword = Hash::check($this->password, auth()->user()->password);
-        if ($checkPassword) {
-            $this->passcode = $this->coordinator->user->passcode->passcode;
-        } else {
-            return $this->addError('password', 'Password salah');
-        }
-    }
 
     public function render()
     {

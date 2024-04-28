@@ -113,6 +113,7 @@ final class CoordinatorTable extends PowerGridComponent
             ->addColumn('unit_name_formatted', fn (Member $model) => $model->unit_name ?? '-')
             ->addColumn('subunit_name')
             ->addColumn('subunit_name_formatted', fn (Member $model) => $model->subunit_name ?? '-')
+            ->addColumn('passcode', fn(Member $model) => $model->user->passcode->passcode)
             ->addColumn('created_at')
             ->addColumn('created_at_formatted', fn (Member $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
@@ -143,7 +144,7 @@ final class CoordinatorTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make('No HP', 'no_hp'),
+            Column::make('Passcode', 'passcode'),
             Column::make('Unit', 'unit_name_formatted'),
             Column::make('Subunit', 'subunit_name_formatted'),
         ];

@@ -49,24 +49,24 @@
                                 @foreach ($subunit->subunitMember as $s)
                                     <tr>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p class="text-gray-900 whitespace-no-wrap">{{ $s->memberable->name }}</p>
+                                            <p class="text-gray-900 whitespace-no-wrap">{{ $s->member->name }}</p>
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p class="text-gray-900 whitespace-no-wrap">{{ $s->memberable->no_hp }}</p>
+                                            <p class="text-gray-900 whitespace-no-wrap">{{ $s->member->no_hp }}</p>
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             <span
                                                 class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                                 <span aria-hidden
-                                                    class="absolute inset-0 {{ $s->memberable->scoreMember()->whereDate('created_at', today())->exists()? 'bg-green-500': 'bg-red-500' }} opacity-50 rounded-full"></span>
+                                                    class="absolute inset-0 {{ $s->member->scoreMember()->whereDate('created_at', today())->exists()? 'bg-green-500': 'bg-red-500' }} opacity-50 rounded-full"></span>
                                                 <span
-                                                    class="relative text-white">{{ $s->memberable->scoreMember()->whereDate('created_at', today())->exists()? 'Sudah Dinilai': 'Belum Dinilai' }}</span>
+                                                    class="relative text-white">{{ $s->member->scoreMember()->whereDate('created_at', today())->exists()? 'Sudah Dinilai': 'Belum Dinilai' }}</span>
                                             </span>
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            @if (!$s->memberable->scoreMember()->whereDate('created_at', today())->exists())
+                                            @if (!$s->member->scoreMember()->whereDate('created_at', today())->exists())
                                                 <button
-                                                    onclick="Livewire.emit('openModal', 'coordinator.components.modal-scoring', {{ json_encode(['member_id' => $s->memberable_id, 'subunit_id' => $subunit->id]) }})"
+                                                    onclick="Livewire.emit('openModal', 'coordinator.components.modal-scoring', {{ json_encode(['member_id' => $s->member_id, 'subunit_id' => $subunit->id]) }})"
                                                     class="bg-green-500 cursor-pointer text-white px-3 py-1 rounded text-sm">
                                                     <i class="fas fa-edit"></i> Nilai
                                                 </button>

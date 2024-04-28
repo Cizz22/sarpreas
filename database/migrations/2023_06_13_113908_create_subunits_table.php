@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subunits', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('detail_location', 100);
+            $table->text('detail_location');
             $table->foreignId('unit_id')->constrained('units')->onDelete('cascade');
             $table->foreignId('coordinator_id')->nullable()->constrained('members')->onDelete('set null');
             $table->timestamps();

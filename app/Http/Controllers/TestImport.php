@@ -11,7 +11,7 @@ class TestImport extends Controller
     public function index()
     {
         $import = new SubunitMemberImport();
-        $import->onlySheets('Member Subunit Outdoor');
+        $import->onlySheets('data input member outdoor');
 
         $data = Excel::toCollection($import, public_path('data/data.xlsx'));
         dd($data);

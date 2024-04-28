@@ -33,4 +33,4 @@ console_command = 'php /var/www/html/artisan tinker'
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'
-  cpus = 1
+  cpus = 2

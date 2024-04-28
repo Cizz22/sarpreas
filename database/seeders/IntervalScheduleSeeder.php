@@ -23,10 +23,10 @@ class IntervalScheduleSeeder extends Seeder
         $now = Carbon::now();
         $firstOfJanuary = Carbon::createFromDate($now->year, 1, 1);
 
-        $daysCurrentMonth = Carbon::createFromDate($now->year, $now->month, $now->endOfMonth()->day);
+        $endofschedule = Carbon::createFromDate(2030, 12, 31);
 
         // Calculate the difference in days
-        $totalDays = $firstOfJanuary->diffInDays($daysCurrentMonth);
+        $totalDays = $firstOfJanuary->diffInDays($endofschedule);
 
         //Exclude squads with name 'Merah' and 'Putih'
         $squads = ['A', 'B', 'C', 'D', 'Merah', 'Putih'];
