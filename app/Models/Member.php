@@ -79,7 +79,7 @@ class Member extends Model
         foreach ($score as $s) {
             $total += $s->sumScore();
         }
-        $this->total_score = $total;
+        // $this->total_score = $total;
         return ($total);
     }
 
