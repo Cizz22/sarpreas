@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         //Add total_score to member table
-        Schema::table('member', function (Blueprint $table) {
+        Schema::table('members', function (Blueprint $table) {
             $table->integer('total_score')->nullable();
         });
     }
