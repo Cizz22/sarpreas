@@ -133,7 +133,7 @@ final class ReportTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make('Total Nilai', 'total_score', 'total_score')
+            Column::make('Total Nilai', 'total_score')
                 ->sortable(),
 
             Column::make('Persentase Presensi', 'presensi')
@@ -148,8 +148,8 @@ final class ReportTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::inputText('name'),
-            Filter::datepicker('created_at_formatted', 'created_at'),
+            Filter::inputText('members.name'),
+            Filter::number('total_score'),
         ];
     }
 

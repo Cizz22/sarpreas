@@ -71,7 +71,7 @@ class Member extends Model
     public function totalScorebyMonthandYear($month, $year)
     {
 
-        $daysInMonth = Carbon::create($year, $month)->daysInMonth;
+        // $daysInMonth = Carbon::create($year, $month)->daysInMonth;
 
         $score = $this->scoreMember()->whereMonth('tanggal_penilaian', $month)->whereYear('tanggal_penilaian', $year)->get();
         $total = 0;
