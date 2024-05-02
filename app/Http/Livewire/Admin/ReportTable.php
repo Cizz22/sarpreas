@@ -62,8 +62,7 @@ final class ReportTable extends PowerGridComponent
     {
         $data = Member::query()
             ->join('subunit_members', function ($q) {
-                $q->on("members.id", "subunit_members.memberable_id")
-                    ->where('subunit_members.memberable_type', 'App\Models\Member');
+                $q->on("members.id", "subunit_members.member_id");
             })
             ->join('subunits', 'subunit_members.subunit_id', '=', 'subunits.id')
             ->join('units', 'subunits.unit_id', '=', 'units.id')
