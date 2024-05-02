@@ -78,7 +78,7 @@ class Member extends Model
         foreach ($score as $s) {
             $total += $s->sumScore();
         }
-        return ($total / $daysInMonth);
+        return ($total);
     }
 
     public function totalPercentagePresensibyMonthandYear($month, $year)
@@ -94,7 +94,6 @@ class Member extends Model
             }
         }
 
-        $totalPercentage = ($total / $daysInMonth) * 100;
-        return $totalPercentage;
+        return "$total/$daysInMonth";
     }
 }

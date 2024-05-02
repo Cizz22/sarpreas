@@ -107,7 +107,7 @@ final class ReportTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('name')
             ->addColumn('total_score', fn (Member $model) => $model->totalScorebyMonthandYear($this->monthInput, $this->yearInput))
-            ->addColumn('presensi_percentage', fn (Member $model) => $model->totalPercentagePresensibyMonthandYear($this->monthInput, $this->yearInput));
+            ->addColumn('presensi', fn (Member $model) => $model->totalPercentagePresensibyMonthandYear($this->monthInput, $this->yearInput));
     }
 
     /*
