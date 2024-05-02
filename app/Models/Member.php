@@ -14,7 +14,8 @@ class Member extends Model
         'name',
         'no_hp',
         'user_id',
-        'unit_id'
+        'unit_id',
+        'total_score',
     ];
 
     public function user()
@@ -78,6 +79,7 @@ class Member extends Model
         foreach ($score as $s) {
             $total += $s->sumScore();
         }
+        $this->total_score = $total;
         return ($total);
     }
 
