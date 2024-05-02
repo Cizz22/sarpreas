@@ -13,7 +13,7 @@ return new class extends Migration
     {
         //Add total_score to member table
         Schema::table('member', function (Blueprint $table) {
-            $table->integer('total_score')->default(0)->nullable();
+            $table->integer('total_score')->nullable();
         });
     }
 
