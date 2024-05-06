@@ -133,7 +133,7 @@ final class ReportTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make('Total Nilai', 'total_score', 'total_score')
+            Column::make('Total Nilai', 'total_score', 'total_score'),
 
             Column::make('Persentase Presensi', 'presensi')
         ];
