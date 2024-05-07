@@ -27,6 +27,6 @@ class IntervalSchedule extends Model
 
     public function sessionSchedule()
     {
-        return $this->hasOne(SessionSchedule::class);
+        return $this->hasMany(SessionSchedule::class);
     }
 }

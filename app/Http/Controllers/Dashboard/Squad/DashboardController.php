@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\SessionSchedule;
 use App\Models\SessionScheduleMember;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -14,6 +16,11 @@ class DashboardController extends Controller
     {
         $squad = auth()->user()->squad;
         $interval_schedule = $squad->getTodayIntervalScheduleId();
+
+        if(!$interval_schedule){
+            Auth::logout();
+            return redirect()->route('passcode')->withErrors(['passcode' => 'Hanya diperbolehkan login di jam shift']);
+        }
 
         return view('dashboard.squad.index', compact('squad', 'interval_schedule'));
     }

@@ -104,7 +104,6 @@ final class SquadSchedule extends PowerGridComponent
             ->addColumn('type')
             ->addColumn('date')
             ->addColumn('start_time')
-            ->addColumn('status', fn ($interval) => $interval->has('sessionSchedule')->first() ? $interval->sessionSchedule->status : 'Belum Dilakukan/Libur')
             ->addColumn('end_time');
     }
 
