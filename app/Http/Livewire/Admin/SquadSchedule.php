@@ -176,7 +176,8 @@ final class SquadSchedule extends PowerGridComponent
     {
        return [
            Button::make('detail', 'Detail')
-               ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
+               ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+               ->openModal('squad.components.modal-squad-schedule-detail', ['interval_schedule' => 'id'])
         ];
     }
 
