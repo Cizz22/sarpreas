@@ -62,23 +62,27 @@ final class ReportSKKTable extends PowerGridComponent
     public function datasource(): Builder
     {
         $session = SessionSchedule::query()
-            ->where('session_schedules.unit_id', $this->unitInput)
-            ->where('session_schedules.status', '!=', 'Belum Dilakukan')
-            ->whereDate('session_schedules.date', $this->dateInput);
+            ->join('interval_schedules', function ($join) {
+                $join->on('interval_schedules.id', '=', 'session_schedules.interval_schedule_id');
+            })->join('squads', function ($join) {
+                $join->on('squads.id', '=', 'interval_schedules.squad_id');
+            })->join('shift_schedules', function ($join) {
+                $join->on('shift_schedules.id', '=', 'interval_schedules.shift_schedule_id');
+            })->where('interval_schedules.squad_id', $this->reguInput)
+            ->where('interval_schedules.date', $this->dateInput);
 
         if ($this->shiftInput != 'all') {
-            $session->where('session_schedules.shift', $this->shiftInput);
+            $session->where('interval_schedules.shift_schedule_id', $this->shiftInput);
         }
 
-        $session->join('members as member_1', function ($join) {
-            $join->on('member_1.id', '=', 'session_schedules.member_1_id');
-        })
-            ->join('members as member_2', function ($join) {
-                $join->on('member_2.id', '=', 'session_schedules.member_2_id');
-            })
-            ->select('session_schedules.*', 'member_1.name as member_1_name', 'member_2.name as member_2_name');
+        // $session->join('members as member_1', function ($join) {
+        //     $join->on('member_1.id', '=', 'session_schedules.member_1_id');
+        // })
+        //     ->join('members as member_2', function ($join) {
+        //         $join->on('member_2.id', '=', 'session_schedules.member_2_id');
+        //     })
 
-        return $session;
+        return $session->select('session_schedules.*', 'squads.name as squad_name', 'shift_schedules.type as shift_type');;
     }
 
     /*
@@ -114,24 +118,11 @@ final class ReportSKKTable extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('id')
-            ->addColumn('member_1_name')
-            ->addColumn('member_2_name')
-            ->addColumn('shift')
-            ->addColumn('status', function (SessionSchedule $model) {
-                if ($model->status == "Belum Dilakukan") {
-                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-500 text-white">
-                Belum Dilakukan
-              </span>';
-                } else if ($model->status == "Sedang Dilakukan") {
-                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500 text-white">
-                Sedang Dilakukan
-              </span>';
-                } else {
-                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-500 text-white">
-                Sudah Dilakukan
-              </span>';
-                }
-            });
+            ->addColumn('squad_name')
+            ->addColumn('type')
+            ->addColumn('shift_type')
+            ->addColumn('status')
+            ->addColumn('created_at');
     }
 
     /*
@@ -152,10 +143,11 @@ final class ReportSKKTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id'),
-            Column::make('Member 1', 'member_1_name'),
-            Column::make('Member 2', 'member_2_name'),
-            Column::make('Shift', 'shift'),
+            Column::make('Regu', 'squad_name'),
+            Column::make('Tipe', 'type'),
+            Column::make('Shift', 'shift_type'),
             Column::make('Status', 'status'),
+            Column::make('Tanggal', 'created_at')
         ];
     }
 
@@ -212,9 +204,9 @@ final class ReportSKKTable extends PowerGridComponent
         return [
 
             //Hide button edit for ID 1
-            Rule::button('detail')
-                ->when(fn ($session) => $session->status === "Belum Dilakukan")
-                ->hide(),
+            // Rule::button('detail')
+            //     ->when(fn ($session) => $session->status === "Belum Dilakukan")
+            //     ->hide(),
         ];
     }
 }

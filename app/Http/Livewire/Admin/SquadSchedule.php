@@ -132,7 +132,6 @@ final class SquadSchedule extends PowerGridComponent
             Column::make('Tanggal', 'date'),
             Column::make('Waktu Mulai', 'start_time'),
             Column::make('Waktu Selesai', 'end_time'),
-            Column::make('Status', 'status'),
         ];
     }
 

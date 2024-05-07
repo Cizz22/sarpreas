@@ -46,9 +46,9 @@
                     name="shift">
                     <option value="">Pilih Shift</option>
                     <option value="all">Semua shift</option>
-                    <option value="Pagi">Pagi</option>
-                    <option value="Siang">Siang</option>
-                    <option value="Malam">Malam</option>
+                    <option value="1">Pagi</option>
+                    <option value="2">Siang</option>
+                    <option value="3">Malam</option>
                 </select>
 
                 <x-input-label for="date" value="Tanggal" />
@@ -67,7 +67,7 @@
         </form>
 
         @if ($userInputProvidedSKK)
-            <livewire:admin.report-s-k-k-table regu="{{ $regu }}" dateInput="{{ $dateInput }}"
+            <livewire:admin.report-s-k-k-table reguInput="{{ $reguInput }}" dateInput="{{ $dateInput }}"
                 shiftInput="{{ $shiftInput }}" />
         @endif
     </x-content>
@@ -84,7 +84,9 @@
                     name="unit">
                     <option value="">Pilih Unit</option>
                     @foreach ($unit as $u)
-                        @if($u->name == 'SKK') @continue @endif
+                        @if ($u->name == 'SKK')
+                            @continue
+                        @endif
                         <option value="{{ $u->id }}">{{ $u->name }}</option>
                     @endforeach
                 </select>

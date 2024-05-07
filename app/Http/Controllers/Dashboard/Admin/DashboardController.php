@@ -41,7 +41,7 @@ class DashboardController extends Controller
             $userInputProvidedSKK = true;
             $userInputProvided = false;
 
-            return view('dashboard.admin.index', compact('dateInput', 'reguInput', 'shiftInput', 'unitInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit', 'squad'));
+            return view('dashboard.admin.index', compact('dateInput', 'reguInput', 'shiftInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit', 'squad'));
         }
 
         $userInputProvided = false;
@@ -70,19 +70,20 @@ class DashboardController extends Controller
     public function reportSKK(Request $request)
     {
         $this->validate(request(), [
-            'unit' => 'required',
+            'regu' => 'required',
             'shift' => 'required',
             'date' => 'required',
         ]);
 
         $dateInput = Carbon::createFromFormat('Y-m-d', $request->date)->toDateString();
         $shiftInput = $request->shift;
-        $unitInput = $request->unit;
+        $reguInput = $request->regu;
+
 
         // $userInputProvidedSKK = true;
         // $userInputProvided = false;
 
-        return redirect()->route('dashboard.admin.index', ['date' => $dateInput, 'shift' => $shiftInput, 'unit' => $unitInput]);
+        return redirect()->route('dashboard.admin.index', ['date' => $dateInput, 'shift' => $shiftInput, 'regu' => $reguInput]);
 
         // return view('dashboard.admin.index', compact('shiftInput', 'dateInput', 'unitInput', 'userInputProvided', 'userInputProvidedSKK', 'month', 'year', 'unit'));
     }

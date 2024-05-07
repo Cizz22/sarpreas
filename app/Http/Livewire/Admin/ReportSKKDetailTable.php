@@ -60,10 +60,7 @@ final class ReportSKKDetailTable extends PowerGridComponent
             ->leftjoin('locations', function ($join) {
                 $join->on('locations.id', '=', 'reports.location_id');
             })
-            ->join('units', function ($join) {
-                $join->on('units.id', '=', 'reports.unit_id');
-            })
-            ->select('reports.*', 'units.name as unit_name', 'locations.name as location_name');
+            ->select('reports.*', 'locations.name as location_name');
 
         return $report;
     }
@@ -103,7 +100,6 @@ final class ReportSKKDetailTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('location_name')
             ->addColumn('interval_time')
-            ->addColumn('unit_name')
             ->addColumn('situation')
             ->addColumn('latitude')
             ->addColumn('longitude')
@@ -140,7 +136,6 @@ final class ReportSKKDetailTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
             Column::make('Additional Information', 'additional_information'),
-
             Column::make('Created at', 'created_at')
         ];
     }
