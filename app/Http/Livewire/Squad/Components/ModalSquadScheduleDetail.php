@@ -24,4 +24,9 @@ class ModalSquadScheduleDetail extends ModalComponent
         $this->shiftInput = $this->interval_schedule->shift_schedule_id;
         $this->reguInput = $this->interval_schedule->squad_id;
     }
+
+    public static function modalMaxWidth(): string
+    {
+        return '6xl';
+    }
 }
