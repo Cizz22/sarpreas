@@ -52,9 +52,6 @@
                                             <p class="text-gray-900 whitespace-no-wrap">{{ $s->member->name }}</p>
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p class="text-gray-900 whitespace-no-wrap">{{ $s->member->no_hp }}</p>
-                                        </td>
-                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             <span
                                                 class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                                 <span aria-hidden
