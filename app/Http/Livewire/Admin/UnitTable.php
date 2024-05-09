@@ -211,15 +211,11 @@ final class UnitTable extends PowerGridComponent
 
             //Hide button edit for ID 1
             Rule::button('detail_shift')
-                ->when(fn ($unit) => $unit->name == "Kebersihan Indoor")
-                ->hide(),
-
-            Rule::button('detail_shift')
-                ->when(fn ($unit) => $unit->name == "Kebersihan Outdoor")
+                ->when(fn ($unit) => $unit->name != "SKK")
                 ->hide(),
 
             Rule::button('detail_subunit')
-                ->when(fn ($unit) => ($unit->name != "Kebersihan Indoor" && $unit->name != "Kebersihan Outdoor"))
+                ->when(fn ($unit) => ($unit->name == "SKK"))
                 ->hide()
         ];
     }
