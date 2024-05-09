@@ -24,7 +24,7 @@
                             @foreach ($d[3] as $c)
                                 @switch($d[4])
                                     @case('subunit')
-                                        <option value="{{ $c['member']['id'] }}">{{ $c['name'] }}</option>
+                                        <option value="{{ $c['member']['id'] }}">{{ $c['member']['name'] }}</option>
                                     @break
                                     @case('instrument')
                                     @break

@@ -25,7 +25,7 @@
                 name="coordinator_id" wire:model.lazy="coordinator_id">
                 <option value="">Pilih Koordinator</option>
                 @foreach ($coordinators as $c)
-                    <option value="{{ $c->member->id }}">{{ $c->name }}</option>
+                    <option value="{{ $c->member->id }}">{{ $c->member->name }}</option>
                 @endforeach
             </select>
             <hr />
