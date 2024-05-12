@@ -27,7 +27,6 @@ class ModalAdd extends ModalComponent
     {
         $this->validate([
             'name' => 'required',
-            'no_hp' => 'required',
             'unit_id' => 'required',
         ]);
 
@@ -43,7 +42,6 @@ class ModalAdd extends ModalComponent
 
         $user->member()->create([
             'name' => $this->name,
-            'no_hp' => $this->no_hp,
             'unit_id' => $this->unit_id,
         ]);
 

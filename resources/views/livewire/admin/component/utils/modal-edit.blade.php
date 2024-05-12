@@ -27,6 +27,7 @@
                                         <option value="{{ $c['member']['id'] }}">{{ $c['member']['name'] }}</option>
                                     @break
                                     @case('instrument')
+                                    <option value="{{ $c['id'] }}">{{ $c['name'] }}</option>
                                     @break
 
                                     @default

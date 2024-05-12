@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Instrument;
+use App\Models\Unit;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +15,7 @@ use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Heade
 final class InstrumentTable extends PowerGridComponent
 {
     use ActionButton;
+    public $dataEdit;
 
     /*
     |--------------------------------------------------------------------------
@@ -25,6 +27,22 @@ final class InstrumentTable extends PowerGridComponent
     public function setUp(): array
     {
         $this->showCheckBox();
+
+        $unit = Unit::all();
+
+        $this->dataEdit = collect([
+            "fields" => [
+                0 => ['name', 'Nama', 'text'],
+                1 => [
+                    'unit_id',
+                    'Unit',
+                    'select',
+                    $unit,
+                    'instrument'
+                ],
+            ],
+            "model" => "App\Models\Instrument"
+        ]);
 
         return [
             Exportable::make('export')
@@ -171,11 +189,12 @@ final class InstrumentTable extends PowerGridComponent
     {
         return [
             Button::make('edit', 'Edit')
-                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
-
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 rounded text-sm')
+                ->openModal('admin.component.utils.modal-edit', ['id' => 'id', "data" => $this->dataEdit]),
 
             Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Instrument'])
 
         ];
     }

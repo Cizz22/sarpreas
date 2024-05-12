@@ -9,7 +9,7 @@ use LivewireUI\Modal\ModalComponent;
 
 class ModalAdd extends ModalComponent
 {
-    public $coordinators, $name, $coordinator_id, $unit_id;
+    public $coordinators, $name, $coordinator_id, $unit_id, $detail_location;
 
     public function mount($unit_id)
     {
@@ -38,6 +38,7 @@ class ModalAdd extends ModalComponent
             'name' => $this->name,
             'coordinator_id' => $this->coordinator_id,
             'unit_id' => $this->unit_id,
+            'detail_location' => $this->detail_location
         ]);
 
         $this->closeModalWithEvents([

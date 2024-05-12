@@ -21,7 +21,6 @@ class ModalAdd extends ModalComponent
     {
         $this->validate([
             'name' => 'required',
-            'no_hp' => 'required',
         ]);
 
         //create password at least 8 characters from random string
@@ -36,7 +35,6 @@ class ModalAdd extends ModalComponent
 
         $user->member()->create([
             'name' => $this->name,
-            'no_hp' => $this->no_hp,
         ]);
 
         \App\Models\Passcode::generatePasscode($user->id);

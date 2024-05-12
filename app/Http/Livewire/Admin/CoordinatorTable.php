@@ -30,7 +30,6 @@ final class CoordinatorTable extends PowerGridComponent
         $this->dataEdit = collect([
             "fields" => [
                 0 => ['name', 'Nama', 'text'],
-                1 => ['no_hp', 'No HP', 'text'],
             ],
             "model" => "App\Models\Member"
         ]);

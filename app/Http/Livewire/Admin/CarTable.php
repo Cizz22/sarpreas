@@ -139,12 +139,16 @@ final class CarTable extends PowerGridComponent
     public function actions(): array
     {
         return [
+            Button::make('gambar', 'Gambar')
+                ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+                ->openModal('admin.component.car-booking.modal-car-image', ['car_id' => 'id']),
+
             Button::make('edit', 'Edit')
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
 
-
             Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
+                ->openModal('admin.component.utils.modal-delete', ['id' => 'id', 'model' => 'App\Models\Car'])
 
         ];
     }

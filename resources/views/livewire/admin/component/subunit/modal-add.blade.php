@@ -18,6 +18,11 @@
             @enderror
         </div>
         <div class="flex flex-wrap mb-6">
+            <x-input-label for="name" value="Detail Lokasi (bila ada)" />
+            <x-text-input id="name" class="block mt-2 w-full" wire:model.lazy="detail_location" type="text"
+                name="detail_location" autofocus />
+        </div>
+        <div class="flex flex-wrap mb-6">
             <x-input-label for="name" value="Koordinator Unit" />
             <small class="ml-1 text-blue-700 cursor-pointer" wire:click="refreshCoordinators">(tekan untuk refresh)</small>
             <select

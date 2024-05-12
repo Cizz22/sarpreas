@@ -21,9 +21,15 @@
                         </a>
                         <a href="{{ route('passcode') }}">
                             <button class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded">
-                               Coordinator/Member
+                                Koordinator/Regu
                             </button>
                         </a>
+
+                        <button onclick="Livewire.emit('openModal', 'guest.component.pick-car-booking')"
+                            class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded">
+                            Peminjaman Kendaraan
+                        </button>
+
                     </div>
 
 
@@ -34,4 +40,7 @@
             </div>
         </div>
     </div>
+    @push('js')
+        @livewire('livewire-ui-modal')
+    @endpush
 </x-guest-layout>

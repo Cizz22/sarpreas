@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Car;
 use App\Models\CarBooking;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class FormBookingController extends Controller
 {
@@ -33,8 +34,12 @@ class FormBookingController extends Controller
             'booking_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'reason' => 'required',
         ];
+
+        // Check if start time is before end time
+        if (strtotime($request->start_time) >= strtotime($request->end_time)) {
+            throw ValidationException::withMessages(['start_time' => 'Start time must be before end time.']);
+        }
 
         $this->filePath = null;
 
@@ -48,6 +53,18 @@ class FormBookingController extends Controller
             $file = $request->file('supporting_documents');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $this->filePath = $request->file('supporting_documents')->storeAs('uploads', $fileName, 'public');
+        }
+
+        $existingBookings = CarBooking::where('car_id', $request->car_id)
+            ->where('booking_date', $request->booking_date)
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('start_time', [$request->start_time, $request->end_time])
+                    ->orWhereBetween('end_time', [$request->start_time, $request->end_time]);
+            })
+            ->exists();
+
+        if ($existingBookings) {
+            throw ValidationException::withMessages(['start_time' => 'Kendaraan tidak tersedia pada tanggal dan waktu yang diminta']);
         }
 
         // Create random 5 digit string for booking code

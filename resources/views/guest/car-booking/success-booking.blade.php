@@ -11,7 +11,10 @@
         <div class="mt-5">
             <p class="text-gray-600 mt-2">Pemesanan anda berhasil</p>
             <p class="text-center text-2xl font-semibold mt-3">Booking Code</p>
-            <h3 class="text-center text-2xl font-semibold mt-3">{{$bookingCode}}</h3>
+            <h3 class="text-center text-2xl font-semibold mt-3">{{ $bookingCode }}</h3>
+            <p class="text-center text-gray-600 mt-3">Harap simpan kode pemesanan ini dengan baik. Kode ini akan
+                digunakan untuk pengambilan dan pengembalian kendaraan.</p>
         </div>
+
     </div>
 </x-guest-layout>

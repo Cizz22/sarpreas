@@ -8,6 +8,23 @@
 
                 <form method="POST" action="{{ route('peminjaman.form.submit') }}" enctype="multipart/form-data">
                     @csrf
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-3 rounded relative font-medium text-sm"
+                            role="alert">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if (session('status'))
+                        <div
+                            class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative font-medium text-sm">
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
                         <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-3">
                             <div class="text-gray-600">
@@ -211,7 +228,7 @@
                                 <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                                     <div class="md:col-span-5">
                                         <label for="full_name">Waktu mulai pinjam</label>
-                                        <input type="time" name="start_date" id="full_name"
+                                        <input type="time" name="start_time" id="full_name"
                                             class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" />
                                     </div>
 
@@ -225,7 +242,7 @@
                                 <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                                     <div class="md:col-span-5">
                                         <label for="full_name">Waktu selesai pinjam</label>
-                                        <input type="time" name="end_date" id="full_name"
+                                        <input type="time" name="end_time" id="full_name"
                                             class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" />
                                     </div>
 
@@ -297,12 +314,6 @@
                     </div>
                 </form>
             </div>
-
-            <a href="https://www.buymeacoffee.com/dgauderman" target="_blank"
-                class="md:absolute bottom-0 right-0 p-4 float-right">
-                <img src="https://www.buymeacoffee.com/assets/img/guidelines/logo-mark-3.svg" alt="Buy Me A Coffee"
-                    class="transition-all rounded-full w-14 -rotate-45 hover:shadow-sm shadow-lg ring hover:ring-4 ring-white">
-            </a>
         </div>
     </div>
 

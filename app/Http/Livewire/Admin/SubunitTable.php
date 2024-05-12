@@ -39,7 +39,8 @@ final class SubunitTable extends PowerGridComponent
         $this->dataEdit = collect([
             "fields" => [
                 0 => ['name', 'Nama Subunit', 'text'],
-                1 => [
+                1 => ['detail_location', 'Detail Lokasi (bila ada)', 'text'],
+                2 => [
                     'coordinator_id',
                     'Koordinator',
                     'select',

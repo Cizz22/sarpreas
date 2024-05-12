@@ -6,6 +6,20 @@
     </div>
     <hr />
     <div class="px-4 mt-4">
+        <div id="data_member">
+            <div class="grid grid-cols-2">
+                <div>
+                    <p class="font-bold mb-0 mt-2">Nama</p>
+                    <p>AU</p>
+                </div>
+                <div>
+                    <p class="font-bold mb-0 mt-2">No. Handphone</p>
+                    <p>Au</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-4 mt-4">
         <div id="data_patrol_session">
             <livewire:admin.car-booking-return-table carBookingId="{{ $carBookingId }}" />
         </div>

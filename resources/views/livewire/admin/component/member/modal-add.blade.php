@@ -19,17 +19,6 @@
             @enderror
         </div>
         <div class="flex flex-wrap mb-6">
-            <x-input-label for="name" value="No Handphone" />
-            <x-text-input id="no_hp" class="block mt-2 w-full" wire:model.lazy="no_hp" type="text"
-                name="no_hp" autofocus />
-
-            @error('no_hp')
-                <p class="text-red-500 text-xs italic mt-4">
-                    {{ $message }}
-                </p>
-            @enderror
-        </div>
-        <div class="flex flex-wrap mb-6">
             <x-input-label for="unit" value="unit" />
             <select
                 class="block mt-1 mb-3 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'"

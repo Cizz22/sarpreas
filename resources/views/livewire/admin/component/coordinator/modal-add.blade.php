@@ -18,17 +18,6 @@
                 </p>
             @enderror
         </div>
-        <div class="flex flex-wrap mb-6">
-            <x-input-label for="name" value="No Handphone" />
-            <x-text-input id="no_hp" class="block mt-2 w-full" wire:model.lazy="no_hp" type="text"
-                name="no_hp" autofocus />
-
-            @error('no_hp')
-                <p class="text-red-500 text-xs italic mt-4">
-                    {{ $message }}
-                </p>
-            @enderror
-        </div>
 
         <div class="flex flex-wrap mb-2 justify-end mt-3">
             <button wire:loading.attr="disabled" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" type="submit">

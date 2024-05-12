@@ -33,7 +33,6 @@ final class MemberTable extends PowerGridComponent
         $this->dataEdit = collect([
             "fields" => [
                 0 => ['name', 'Nama', 'text'],
-                1 => ['no_hp', 'No HP', 'text'],
             ],
             "model" => "App\Models\Member"
         ]);
@@ -141,7 +140,6 @@ final class MemberTable extends PowerGridComponent
                 ->searchable()
                 ->sortable()
                 ->hidden(),
-
             Column::make('Name', 'name')
                 ->searchable()
                 ->sortable(),
@@ -160,19 +158,6 @@ final class MemberTable extends PowerGridComponent
             Button::make('add', 'Add')
                 ->class('bg-blue-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
                 ->openModal('admin.component.member.modal-add', []),
-
-            Button::make('upload', 'Upload Excel')
-                ->class('bg-green-500 cursor-pointer text-white px-3 py-2 rounded text-sm')
-                ->openModal('admin.component.utils.excel-uploader', [
-                    "data" => [
-                        0 => 'name',
-                        1 => 'no_hp',
-                        2 => 'unit_name',
-                        3 => 'subunit_name'
-                    ],
-                    "model" => 'App\Models\Member'
-
-                ]),
         ];
     }
 
