@@ -3,12 +3,19 @@
     <section class="">
         <div class="container max-w-screen px-1 py-10 mx-auto">
             <h2 class="just h-20 mx-auto">Daftar Kendaraan</h2>
-
+            <div class="max-w-lg mx-auto mb-8">
+                <form action="{{ route('peminjaman.list-kendaraan') }}" method="GET" class="flex">
+                    <label for="search" class="sr-only">Search for a car:</label>
+                    <input id="search" type="text" name="search" placeholder="Search..."
+                        class="w-full border border-gray-300 rounded-l-md py-2 px-4 focus:outline-none focus:border-blue-500">
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-r-md">Search</button>
+                </form>
+            </div>
 
             <div
                 class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <!-- component -->
-
                 @foreach ($cars as $car)
                     <div
                         class="relative flex w-full flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">

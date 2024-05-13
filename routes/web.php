@@ -40,6 +40,7 @@ Route::prefix('peminjaman-kendaraan')->name('peminjaman.')->group(function () {
     Route::post('form/submit', [App\Http\Controllers\Guest\CarBooking\FormBookingController::class, 'submit'])->name('form.submit');
     Route::get('form/success', [App\Http\Controllers\Guest\CarBooking\FormBookingController::class, 'success'])->name('form.success');
     Route::get('kendaraan', [App\Http\Controllers\Guest\CarBooking\ListCarController::class, 'index'])->name('list-kendaraan');
+    Route::get('kendaraan/search', [App\Http\Controllers\Guest\CarBooking\ListCarController::class, 'search'])->name('list-kendaraan.search');
     Route::get('pinjam', [App\Http\Controllers\Guest\CarBooking\FormReturnBorrowController::class, 'index'])->name('form-borrow-return');
     Route::post('pinjam/submit', [App\Http\Controllers\Guest\CarBooking\FormReturnBorrowController::class, 'submit'])->name('form-borrow.submit');
 });
