@@ -110,7 +110,7 @@ final class MemberScoreTable extends PowerGridComponent
             ->addColumn('prensensi')
             ->addColumn('tanggal_penilaian')
             ->addColumn('tanggal_penilaian_formatted', fn (ScoreMember $model) => Carbon::parse($model->tanggal_penilaian)->format('d/m/Y'))
-            ->addColumn('sum_score', fn (ScoreMember $model) => $model->sumScore());
+            ->addColumn('total_score');
     }
 
     /*
@@ -145,7 +145,7 @@ final class MemberScoreTable extends PowerGridComponent
             Column::make('Tanggal Penilaian', 'tanggal_penilaian_formatted', 'tanggal_penilaian')
                 ->searchable(),
 
-            Column::make('Total Skor', 'sum_score')
+            Column::make('Total Skor', 'total_score')
                 ->searchable()
                 ->sortable(),
 

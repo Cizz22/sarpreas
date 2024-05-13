@@ -22,4 +22,13 @@ class Car extends Model
     {
         return $this->hasMany(CarBooking::class);
     }
+
+    public function getImageAttribute($image)
+    {
+        if ($image) {
+            return asset("storage/$image");
+        } else {
+            return "https://generatorfun.com/code/uploads/Random-Car-image-10.jpg";
+        }
+    }
 }

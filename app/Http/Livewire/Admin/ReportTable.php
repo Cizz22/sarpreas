@@ -66,6 +66,7 @@ final class ReportTable extends PowerGridComponent
             })
             ->join('subunits', 'subunit_members.subunit_id', '=', 'subunits.id')
             ->join('units', 'subunits.unit_id', '=', 'units.id')
+            ->join('score_members', 'members.id', '=', 'score_members.member_id')
             ->where('units.id', $this->unitInput)
             ->select('members.*');
 
@@ -146,8 +147,7 @@ final class ReportTable extends PowerGridComponent
      */
     public function filters(): array
     {
-        return [
-        ];
+        return [];
     }
 
     /*

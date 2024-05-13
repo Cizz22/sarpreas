@@ -77,7 +77,7 @@ class Member extends Model
         $score = $this->scoreMember()->whereMonth('tanggal_penilaian', $month)->whereYear('tanggal_penilaian', $year)->get();
         $total = 0;
         foreach ($score as $s) {
-            $total += $s->sumScore();
+            $total += $s->total_score;
         }
         // $this->total_score = $total;
         return ($total);

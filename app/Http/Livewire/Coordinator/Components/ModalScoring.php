@@ -65,14 +65,21 @@ class ModalScoring extends ModalComponent
             'tanggal_penilaian' => now(),
         ]);
 
-
+        $sum_score = 0;
 
         foreach ($this->instruments as $k => $instrument) {
             $score->scoreDetail()->create([
                 'instrument_id' => $instrument->id,
                 'score' => $this->{'instrument' . $k},
             ]);
+
+            $sum_score += $this->{'instrument' . $k};
         }
+
+        $total_score = floor(($sum_score / (25 * count($this->instruments))) * 100);
+
+        $score->total_score = $total_score;
+        $score->save();
 
         redirect()->route('dashboard.coordinator.index');
     }

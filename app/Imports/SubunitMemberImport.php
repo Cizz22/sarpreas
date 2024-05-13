@@ -20,6 +20,7 @@ class SubunitMemberImport implements WithMultipleSheets
             'Member Subunit Indoor' => new IndoorSheet(),
             'SKK' => new SKKImport(),
             'data input member outdoor' => new OutdoorImport(),
+            'Mobil' => new MobilImport()
         ];
     }
 
