@@ -4,7 +4,7 @@
         <div class="container max-w-screen px-1 py-10 mx-auto">
             <h2 class="just h-20 mx-auto">Daftar Kendaraan</h2>
 
-            
+
             <div
                 class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <!-- component -->
@@ -12,10 +12,10 @@
                 @foreach ($cars as $car)
                     <div
                         class="relative flex w-full flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                        <a href="{{ asset("storage/$car->image") }}" target="_blank">
+                        <a href="{{ $car->image }}" target="_blank">
                             <div
                                 class="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                                <img class="rounded-t h-72 w-full object-cover" src="{{ asset("storage/$car->image") }}"
+                                <img class="rounded-t h-72 w-full object-cover" src="{{ $car->image }}"
                                     alt="kendaraan" />
                                 <div
                                     class="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60">

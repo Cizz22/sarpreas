@@ -7,7 +7,7 @@
     <hr />
     <div class="px-4 mt-4">
         <div id="filePreview" class="w-full h-full flex items-center justify-center">
-            <img class="w-full" src="{{ asset("storage/$car->image") }}" alt="">
+            <img class="w-full" src="{{ $car->image}}" alt="">
         </div>
     </div>
 </div>
