@@ -52,7 +52,7 @@
                 <label for="full_name">Gambar Kendaraan</label>
                 <div
                     class="relative border-2 rounded-md px-4 py-3 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out">
-                    <input type="file" id="fileAttachment" name="image" wire:model="new_image"
+                    <input type="file" id="fileAttachment" name="new_image" wire:model="new_image"
                         class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
 
                     <div class="flex items-center" style="display: flex;" id="fileInfo">
@@ -65,13 +65,13 @@
                     </div>
                     <span class="text-sm text-gray-500">Max file size: 1MB</span>
                 </div>
-                @if ($filepath)
-                    <div id="filePreview" class="w-full h-full flex items-center justify-center">
-                        <img class="w-full" src="{{ $filepath }}" alt="">
-                    </div>
-                @elseif ($new_image)
+                @if ($new_image)
                     <div id="filePreview" class="w-full h-full flex items-center justify-center">
                         <img class="w-full" src="{{ $new_image->temporaryUrl() }}" alt="">
+                    </div>
+                @elseif ($filepath)
+                    <div id="filePreview" class="w-full h-full flex items-center justify-center">
+                        <img class="w-full" src="{{ $filepath }}" alt="">
                     </div>
                 @endif
             </div>

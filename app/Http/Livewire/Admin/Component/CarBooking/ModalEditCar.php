@@ -33,14 +33,16 @@ class ModalEditCar extends ModalComponent
 
         if ($this->new_image) {
             $this->validate([
-                'image' => 'required|image|max:1MB'
+                'new_image' => 'required|image|max:1024'
             ]);
         }
 
         if ($this->new_image) {
             $file = $this->new_image;
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $this->filepath = $this->image->storeAs('uploads', $fileName, 'public');
+            $this->filepath = $this->new_image->storeAs('uploads', $fileName, 'public');
+        }else {
+            $this->filepath = null;
         }
 
         $this->car->update([
