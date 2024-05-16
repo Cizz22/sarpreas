@@ -13,8 +13,6 @@ class TestImport extends Controller
         $import = new SubunitMemberImport();
         $import->onlySheets('outdoor');
 
-        $data = Excel::toCollection($import, public_path('data/data2.xlsx'));
-
-        dd($data);
+        $data = Excel::import($import, public_path('data/data2.xlsx'));
     }
 }

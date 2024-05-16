@@ -85,6 +85,7 @@ class IndoorSheet implements ToCollection
                     }
                 }
             } else {
+                if ($row[$name_index] == null) continue;
                 if (strtolower(trim($this->koordinator->name)) === strtolower(trim($row[$name_index]))) {
                     continue;
                 }

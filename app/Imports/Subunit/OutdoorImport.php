@@ -51,7 +51,7 @@ class OutdoorImport implements ToCollection
                     \App\Models\Passcode::generatePasscode($coordinator_user->id);
                 } else {
                     $subunit = \App\Models\Subunit::create([
-                        'name' => 'Subunit ' . $row[$subunit_index],
+                        'name' => 'Subunit ' . $this->koordinator->name,
                         'detail_location' => $row[$subunit_index],
                         'unit_id' => $unit_id,
                         'coordinator_id' => $this->koordinator->id
@@ -89,6 +89,7 @@ class OutdoorImport implements ToCollection
                     }
                 }
             } else {
+                if ($row[$name_index] == null) continue;
                 if (strtolower(trim($this->koordinator->name)) === strtolower(trim($row[$name_index]))) {
                     continue;
                 }

@@ -19,8 +19,8 @@ class SubunitMemberImport implements WithMultipleSheets
         return [
             'FIK INDOOR' => new IndoorSheet(),
             'SKK' => new SKKImport(),
-            'data input member outdoor' => new OutdoorImport(),
-            'outdoor' => new MobilImport()
+            'outdoor' => new OutdoorImport(),
+            'Mobil' => new MobilImport()
         ];
     }
 
