@@ -60,16 +60,9 @@ final class ReportTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        $data = Member::query()
-            ->join('subunit_members', function ($q) {
-                $q->on("members.id", "subunit_members.member_id");
-            })
-            ->join('subunits', 'subunit_members.subunit_id', '=', 'subunits.id')
-            ->join('units', 'subunits.unit_id', '=', 'units.id')
-            ->join('score_members', 'members.id', '=', 'score_members.member_id')
-            ->where('units.id', $this->unitInput)
+        $data = Member::query()->has('scoreMember')
+            ->where('unit_id', $this->unitInput)
             ->select('members.*');
-
         return $data;
     }
 
@@ -108,7 +101,7 @@ final class ReportTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('name')
             ->addColumn('total_score', fn (Member $model) => $model->totalScorebyMonthandYear($this->monthInput, $this->yearInput))
-            ->addColumn('presensi', fn (Member $model) => $model->totalPercentagePresensibyMonthandYear($this->monthInput, $this->yearInput));
+            ->addColumn('presensi', fn (Member $model) => $model->totalPresensibyMonthandYear($this->monthInput, $this->yearInput));
     }
 
     /*
@@ -128,15 +121,13 @@ final class ReportTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-
-
             Column::make('Name', 'name')
                 ->searchable()
                 ->sortable(),
 
             Column::make('Total Nilai', 'total_score', 'total_score'),
 
-            Column::make('Persentase Presensi', 'presensi')
+            Column::make('Presensi', 'presensi')
         ];
     }
 

@@ -41,21 +41,21 @@
                     <div class="">
                         <div class="flex items-center gap-x-3">
                             <input id="presensi" name="presensi"
-                                type="radio" value="hadir" wire:model.defer="presensi"
+                                type="radio" value="Hadir" wire:model.defer="presensi"
                                 class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                             <label for="presensi"
                                 class="block text-sm font-medium leading-6 text-gray-900">Hadir</label>
                         </div>
                         <div class="flex items-center gap-x-3">
                             <input id="presensi" name="presensi"
-                                type="radio" wire:model.defer="presensi" value="izin"
+                                type="radio" wire:model.defer="presensi" value="Izin"
                                 class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                             <label for="presensi"
                                 class="block text-sm font-medium leading-6 text-gray-900">Izin</label>
                         </div>
                         <div class="flex items-center gap-x-3">
                             <input id="presensi" name="presensi"
-                                type="radio" wire:model.defer="presensi" value="alpa"
+                                type="radio" wire:model.defer="presensi" value="Alpha"
                                 class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                             <label for="presensi"
                                 class="block text-sm font-medium leading-6 text-gray-900">Tidak Hadir</label>

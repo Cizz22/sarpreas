@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('subunits_id')->nullable()->constrained('subunits')->onDelete('set null');
             $table->foreignId('coordinator_id')->nullable()->constrained('members')->onDelete('set null');
             $table->date('tanggal_presensi')->default(today());
-            $table->enum('status', ['hadir', 'izin', 'sakit', 'alpa']);
+            $table->enum('status', ['Hadir', 'Izin', 'Alpha'])->default('Alpha');
             $table->string('lat', 100)->nullable();
             $table->string('long', 100)->nullable();
             $table->timestamps();

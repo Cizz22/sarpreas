@@ -68,6 +68,36 @@ class Member extends Model
         return $this->session_schedule->where('date', today());
     }
 
+    public function totalPresensibyMonthandYear($month, $year)
+    {
+        $presensi = $this->presensi()->whereMonth('tanggal_presensi', $month)->whereYear('tanggal_presensi', $year)->get();
+
+        // Initialize counters for each status
+        $hadirCount = 0;
+        $alphaCount = 0;
+        $izinCount = 0;
+
+        // Loop through presensi and accumulate counts
+        foreach ($presensi as $record) {
+            switch ($record->status) {
+                case 'Hadir':
+                    $hadirCount++;
+                    break;
+                case 'Alpha':
+                    $alphaCount++;
+                    break;
+                case 'Izin':
+                    $izinCount++;
+                    break;
+                default:
+                    // Handle unexpected status if needed
+                    break;
+            }
+        }
+
+        return "Hadir: " . $hadirCount . " | Alpha: " . $alphaCount . " | Izin: " . $izinCount;
+    }
+
 
     public function totalScorebyMonthandYear($month, $year)
     {

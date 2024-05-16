@@ -16,4 +16,5 @@ class PresensiMember extends Model
         'status',
         'tanggal_presensi',
     ];
+
 }
