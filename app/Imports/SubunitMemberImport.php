@@ -17,10 +17,10 @@ class SubunitMemberImport implements WithMultipleSheets
     public function conditionalSheets(): array
     {
         return [
-            'Member Subunit Indoor' => new IndoorSheet(),
+            'FIK INDOOR' => new IndoorSheet(),
             'SKK' => new SKKImport(),
             'data input member outdoor' => new OutdoorImport(),
-            'Mobil' => new MobilImport()
+            'outdoor' => new MobilImport()
         ];
     }
 

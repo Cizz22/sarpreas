@@ -10,10 +10,12 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class CarTable extends PowerGridComponent
 {
     use ActionButton;
+    use WithExport;
 
     /*
     |--------------------------------------------------------------------------

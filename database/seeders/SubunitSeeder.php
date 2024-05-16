@@ -15,10 +15,13 @@ class SubunitSeeder extends Seeder
      */
     public function run(): void
     {
-        $import = new SubunitMemberImport();
-        $import->onlySheets('Member Subunit Indoor', 'SKK', 'data input member outdoor');
+        $import1 = new SubunitMemberImport();
+        $import2 = new SubunitMemberImport();
+        $import1->onlySheets('outdoor', 'FIK INDOOR');
+        $import2->onlySheets('SKK');
 
-        Excel::import($import, public_path('data/data.xlsx'));
+        Excel::import($import1, public_path('data/data2.xlsx'));
+        Excel::import($import2, public_path('data/data.xlsx'));
 
         // //Create Subunit kebersihan Indoor // Prod
         // $kebersihan_indoor_id = Unit::where('name', 'Kebersihan Indoor')->first()->id;

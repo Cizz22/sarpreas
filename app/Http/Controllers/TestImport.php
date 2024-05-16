@@ -11,9 +11,10 @@ class TestImport extends Controller
     public function index()
     {
         $import = new SubunitMemberImport();
-        $import->onlySheets('Mobil');
+        $import->onlySheets('outdoor');
 
-        $data = Excel::import($import, public_path('data/data.xlsx'));
+        $data = Excel::toCollection($import, public_path('data/data2.xlsx'));
 
+        dd($data);
     }
 }

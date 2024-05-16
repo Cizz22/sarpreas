@@ -10,10 +10,11 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class CoordinatorTable extends PowerGridComponent
 {
-    use ActionButton;
+    use ActionButton, WithExport;
     public $dataEdit;
 
     /*
@@ -112,7 +113,7 @@ final class CoordinatorTable extends PowerGridComponent
             ->addColumn('unit_name_formatted', fn (Member $model) => $model->unit_name ?? '-')
             ->addColumn('subunit_name')
             ->addColumn('subunit_name_formatted', fn (Member $model) => $model->subunit_name ?? '-')
-            ->addColumn('passcode', fn(Member $model) => $model->user->passcode->passcode)
+            ->addColumn('passcode', fn (Member $model) => $model->user->passcode->passcode)
             ->addColumn('created_at')
             ->addColumn('created_at_formatted', fn (Member $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
@@ -218,13 +219,12 @@ final class CoordinatorTable extends PowerGridComponent
 
     public function actionRules(): array
     {
-       return [
+        return [
 
-           //Hide button edit for ID 1
+            //Hide button edit for ID 1
             Rule::button('destroy')
-                ->when(fn($member) => $member->coordinator != null)
+                ->when(fn ($member) => $member->coordinator != null)
                 ->hide(),
         ];
     }
-
 }
