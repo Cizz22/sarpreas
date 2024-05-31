@@ -42,14 +42,12 @@ class ModalScoring extends ModalComponent
         foreach ($this->instruments as $i => $value) {
             if ($this->presensi != 'Hadir') {
                 $this->{'instrument' . $i} = 0;
-                $validate['instrument' . $i] = '';
             } else {
+                if(!$this->{'instrument' . $i}) {
+                    return $this->addError('instrument' . $i, 'Nilai harus diisi');
+                }
                 $validate['instrument' . $i] = 'required';
             }
-        }
-
-        if ($this->presensi != 'Hadir') {
-            $this->validate($validate);
         }
 
         $member = Member::find($this->member_id);
