@@ -37,11 +37,19 @@ class ModalScoring extends ModalComponent
     public function submit()
     {
         $validate = [];
+        // Validate presensi first
+        $this->validate(['presensi' => 'required']);
         foreach ($this->instruments as $i => $value) {
-            $validate['instrument' . $i] = 'required';
+            if ($this->presensi != 'Hadir') {
+                $this->{'instrument' . $i} = 0;
+            } else {
+                $validate['instrument' . $i] = 'required';
+            }
         }
-        $validate['presensi'] = 'required';
-        $this->validate($validate);
+
+        if ($this->presensi != 'Hadir') {
+            $this->validate($validate);
+        }
 
         $member = Member::find($this->member_id);
 

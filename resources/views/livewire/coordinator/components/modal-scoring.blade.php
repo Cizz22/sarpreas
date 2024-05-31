@@ -10,6 +10,29 @@
         @csrf
         <div class="">
             <div class="border-b border-gray-900/10 pb-12">
+                <fieldset class="mb-4">
+                    <p class="text-sm leading-6 text-black">Presensi Member (Wajib diisi)</p>
+                    <div class="">
+                        <div class="flex items-center gap-x-3">
+                            <input id="presensi" name="presensi" type="radio" value="Hadir"
+                                wire:model.defer="presensi"
+                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="presensi"
+                                class="block text-sm font-medium leading-6 text-gray-900">Hadir</label>
+                        </div>
+                        <div class="flex items-center gap-x-3">
+                            <input id="presensi" name="presensi" type="radio" wire:model.defer="presensi"
+                                value="Izin" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="presensi" class="block text-sm font-medium leading-6 text-gray-900">Izin</label>
+                        </div>
+                        <div class="flex items-center gap-x-3">
+                            <input id="presensi" name="presensi" type="radio" wire:model.defer="presensi"
+                                value="Alpha" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="presensi" class="block text-sm font-medium leading-6 text-gray-900">Tidak
+                                Hadir</label>
+                        </div>
+                    </div>
+                </fieldset>
                 @foreach ($instruments as $index => $ins)
                     <fieldset class="mb-4">
                         <p class="text-sm leading-6 text-black">{{ $ins->instrument }}</p>
@@ -36,36 +59,11 @@
                         </p>
                     @enderror
                 @endforeach
-                <fieldset class="mb-4">
-                    <p class="text-sm leading-6 text-black">Presensi Member</p>
-                    <div class="">
-                        <div class="flex items-center gap-x-3">
-                            <input id="presensi" name="presensi"
-                                type="radio" value="Hadir" wire:model.defer="presensi"
-                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                            <label for="presensi"
-                                class="block text-sm font-medium leading-6 text-gray-900">Hadir</label>
-                        </div>
-                        <div class="flex items-center gap-x-3">
-                            <input id="presensi" name="presensi"
-                                type="radio" wire:model.defer="presensi" value="Izin"
-                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                            <label for="presensi"
-                                class="block text-sm font-medium leading-6 text-gray-900">Izin</label>
-                        </div>
-                        <div class="flex items-center gap-x-3">
-                            <input id="presensi" name="presensi"
-                                type="radio" wire:model.defer="presensi" value="Alpha"
-                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                            <label for="presensi"
-                                class="block text-sm font-medium leading-6 text-gray-900">Tidak Hadir</label>
-                        </div>
-                    </div>
-                </fieldset>
             </div>
         </div>
         <div class="flex flex-wrap mb-2 justify-end mt-3">
-            <button wire:loading.attr="disabled" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
+            <button wire:loading.attr="disabled"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
                 <span wire:loading.remove>Submit</span>
                 <span wire:loading>
                     <i class="fa fa-spinner fa-spin"></i> Submitting...
