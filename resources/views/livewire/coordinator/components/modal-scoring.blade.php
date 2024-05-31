@@ -33,6 +33,11 @@
                         </div>
                     </div>
                 </fieldset>
+                @error('presensi')
+                        <p class="text-red-500 text-xs italic mt-4">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 @foreach ($instruments as $index => $ins)
                     <fieldset class="mb-4">
                         <p class="text-sm leading-6 text-black">{{ $ins->instrument }}</p>
