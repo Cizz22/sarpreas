@@ -56,6 +56,13 @@
                                 <label for="{{ 'instrument' . $index }}"
                                     class="block text-sm font-medium leading-6 text-gray-900">Jelek</label>
                             </div>
+                            <div class="flex items-center gap-x-3">
+                                <input id="{{ 'instrument-' . $index }}" name="{{ 'instrument' . $index }}"
+                                    type="radio" wire:model.defer="{{ 'instrument' . $index }}" value="0"
+                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <label for="{{ 'instrument' . $index }}"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Kosong</label>
+                            </div>
                         </div>
                     </fieldset>
                     @error('instrument' . $index)
